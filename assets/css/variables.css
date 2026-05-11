@@ -1,0 +1,36 @@
+:root {
+    /* Primary Colors - Sleek Indigo/Violet */
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --secondary-color: #ec4899;
+    
+    /* Backgrounds */
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --bg-glass: rgba(255, 255, 255, 0.05);
+    
+    /* Text */
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    
+    /* Effects */
+    --glass-blur: blur(12px);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Mode Tokens */
+body.light-mode {
+    --bg-dark: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --glass-border: 1px solid rgba(0, 0, 0, 0.05);
+}
