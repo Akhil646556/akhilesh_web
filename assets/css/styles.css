@@ -1,8 +1,13 @@
-@import url('variables.css');
-@import url('components.css');
+@import url('variables.css?v=2.3');
+@import url('components.css?v=2.3');
+
+html {
+    background-color: var(--bg-dark);
+    transition: var(--transition-smooth);
+}
 
 body {
-    background-color: var(--bg-dark);
+    background-color: transparent !important;
     color: var(--text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
@@ -42,16 +47,19 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color) !important;
 }
 
-/* Animations */
+/* Animations & 3D Scroll Reveal */
 .glass-card {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: perspective(1200px) rotateX(15deg) translateY(50px) scale(0.95);
+    transform-origin: top center;
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
 .glass-card.reveal {
     opacity: 1;
-    transform: translateY(0);
+    transform: perspective(1200px) rotateX(0deg) translateY(0deg) scale(1);
 }
 
 .navbar-scrolled {
@@ -88,4 +96,65 @@ body.light-mode .navbar-scrolled {
     background: rgba(15, 23, 42, 0.8);
     backdrop-filter: var(--glass-blur);
     border-bottom: var(--glass-border);
+}
+
+/* Responsive Fixes for Extra Small Screens */
+@media (max-width: 576px) {
+    .display-1 {
+        font-size: 2.5rem !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+        margin-bottom: 2rem;
+    }
+
+    .section-padding {
+        padding: 3rem 0;
+    }
+
+    .filter-btn {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        font-size: 0.85rem;
+    }
+
+    .navbar-brand img {
+        width: 150px !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .display-1 {
+        font-size: 2rem !important;
+    }
+
+    .filter-btn {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        font-size: 0.8rem;
+    }
+    
+    .gap-2 {
+        gap: 0.25rem !important;
+    }
+}
+
+/* Premium Form Control Styling */
+.form-control {
+    color: var(--text-main) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    transition: var(--transition-smooth) !important;
+}
+
+body.light-mode .form-control {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.form-control:focus {
+    color: var(--text-main) !important;
+    background-color: transparent !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25) !important;
 }

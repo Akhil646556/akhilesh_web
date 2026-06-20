@@ -5,16 +5,19 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7">
-                <h1 class="display-1 fw-bold mb-4">Hello, I'm <br><span class="text-primary">Akhilesh</span></h1>
+                <h1 class="display-1 fw-bold mb-4">Hello, I'm <br><span class="text-primary">Akhilesh</span> Kumar <span class="text-primary">Prajapati</span></h1>
                 <p class="lead text-muted mb-5">A passionate professional dedicated to creating exceptional digital experiences. Specialized in web development and data integration.</p>
-                <div class="d-flex gap-3">
+                <div class="d-flex flex-wrap gap-3">
                     <a href="#projects" class="btn btn-premium">View Projects</a>
                     <a href="#contact" class="btn btn-outline-light rounded-pill px-4">Get in Touch</a>
                 </div>
             </div>
             <div class="col-lg-5 text-center mt-5 mt-lg-0">
-                <div class="glass-card d-inline-block p-2">
-                    <img src="assets/img/akhilesh.jpeg" alt="Akhilesh" class="img-fluid" style="max-width: 320px;">
+                <div class="hero-image-container">
+                    <div class="hero-image-bg"></div>
+                    <div class="hero-image-card">
+                        <img src="assets/img/akhilesh.png" alt="Akhilesh" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,6 +53,12 @@
                 <div class="glass-card text-center p-4 h-100">
                     <i class="fas fa-database fa-3x mb-3 skill-icon"></i>
                     <h6 class="mb-0">MySQL</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="glass-card text-center p-4 h-100">
+                    <i class="fas fa-database fa-3x mb-3 skill-icon"></i>
+                    <h6 class="mb-0">PostgreSQL</h6>
                 </div>
             </div>
             <div class="col-6 col-md-3 col-lg-2">
@@ -122,7 +131,7 @@
         <h2 class="section-title text-center">Featured Projects</h2>
         
         <!-- Project Filter -->
-        <div class="d-flex justify-content-center gap-2 mb-5">
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
             <button class="btn btn-outline-primary rounded-pill px-4 filter-btn active" data-filter="all">All</button>
             <button class="btn btn-outline-primary rounded-pill px-4 filter-btn" data-filter="web">Web</button>
             <button class="btn btn-outline-primary rounded-pill px-4 filter-btn" data-filter="blockchain">Blockchain</button>
@@ -186,15 +195,19 @@
                     <form id="contactForm">
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control bg-transparent text-white border-secondary" required>
+                            <input type="text" name="name" class="form-control bg-transparent text-white border-secondary" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control bg-transparent text-white border-secondary" required>
+                            <input type="email" name="email" class="form-control bg-transparent text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="tel" name="mobile" class="form-control bg-transparent text-white border-secondary" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Message</label>
-                            <textarea class="form-control bg-transparent text-white border-secondary" rows="4" required></textarea>
+                            <textarea name="message" class="form-control bg-transparent text-white border-secondary" rows="4" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-premium w-100">Send Message</button>
                     </form>

@@ -18,12 +18,13 @@
     <link rel="stylesheet" href="assets/vendors/sweetalert2/sweetalert2.min.css">
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3">
     
     <!-- Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
+<canvas id="particles-3d" class="particles-bg"></canvas>
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top">
     <div class="container">
