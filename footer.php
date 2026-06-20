@@ -13,7 +13,7 @@
 <script src="assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
 
 <!-- Custom Script -->
-<script src="assets/js/jquery.js?v=2.3"></script>
+<script src="assets/js/jquery.js?v=2.5"></script>
 
 </body>
 </html>

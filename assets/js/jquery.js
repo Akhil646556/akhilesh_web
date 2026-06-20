@@ -24,10 +24,17 @@ $(function() {
         // Show SweetAlert2 loading overlay
         Swal.fire({
             title: 'Sending Message...',
-            html: 'Please wait while we transmit your message.',
+            html: '<p style="margin-top: 15px; color: #94a3b8; font-size: 14px;">Please wait while we transmit your message.</p>',
+            imageUrl: 'assets/img/loader.svg',
+            imageWidth: 80,
+            imageHeight: 80,
+            imageAlt: 'Loading...',
+            showConfirmButton: false,
             allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
+            background: '#0f172a',
+            color: '#f8fafc',
+            customClass: {
+                popup: 'border border-secondary'
             }
         });
         

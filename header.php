@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/vendors/sweetalert2/sweetalert2.min.css">
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.3">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.5">
     
     <!-- Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -39,11 +39,11 @@
                 <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
                 <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                <li class="nav-item ms-lg-3">
+                <!-- <li class="nav-item ms-lg-3">
                     <button id="themeToggle" class="btn btn-premium rounded-circle p-2" style="width: 40px; height: 40px;">
                         <i class="fas fa-moon"></i>
                     </button>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

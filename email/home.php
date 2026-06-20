@@ -18,8 +18,12 @@ try {
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'akp41998@gmail.com';                     //SMTP username
-    $mail->Password   = 'obdj tbel iqfw jbst';                              //SMTP password
+    // Load secure local credentials
+    if (file_exists(__DIR__ . '/config.php')) {
+        require_once __DIR__ . '/config.php';
+    }
+    $mail->Username   = defined('SMTP_USER') ? SMTP_USER : '';
+    $mail->Password   = defined('SMTP_PASS') ? SMTP_PASS : '';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     //Recipients

@@ -1,9 +1,10 @@
-@import url('variables.css?v=2.3');
-@import url('components.css?v=2.3');
+@import url('variables.css?v=2.5');
+@import url('components.css?v=2.5');
 
 html {
     background-color: var(--bg-dark);
     transition: var(--transition-smooth);
+    scroll-behavior: auto !important;
 }
 
 body {
