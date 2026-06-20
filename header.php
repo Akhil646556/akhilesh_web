@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/vendors/sweetalert2/sweetalert2.min.css">
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=3.6">
     
     <!-- Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -33,17 +33,27 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#experience">Journey</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                <!-- <li class="nav-item ms-lg-3">
-                    <button id="themeToggle" class="btn btn-premium rounded-circle p-2" style="width: 40px; height: 40px;">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </li> -->
+                
+                <!-- Quick Social Links (Desktop Only) -->
+                <li class="nav-item ms-lg-3 d-none d-lg-flex gap-2">
+                    <a href="https://wa.me/917052547573" target="_blank" class="nav-social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/fighter_akhil_646556?igsh=MWIxcXFvMnFjOXAyaA==" target="_blank" class="nav-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                </li>
+                
+                <!-- CTA Button -->
+                <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                    <a href="#contact" class="btn-premium-nav">
+                        <i class="fas fa-paper-plane me-2"></i>Hire Me
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

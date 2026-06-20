@@ -1,10 +1,10 @@
-@import url('variables.css?v=2.5');
-@import url('components.css?v=2.5');
+@import url('variables.css?v=3.6');
+@import url('components.css?v=3.6');
 
 html {
     background-color: var(--bg-dark);
-    transition: var(--transition-smooth);
     scroll-behavior: auto !important;
+    overflow-x: hidden !important;
 }
 
 body {
@@ -12,8 +12,7 @@ body {
     color: var(--text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
-    overflow-x: hidden;
-    transition: var(--transition-smooth);
+    overflow-x: hidden !important;
 }
 
 /* Typography & Contrast Fixes */
@@ -51,16 +50,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Animations & 3D Scroll Reveal */
 .glass-card {
     opacity: 0;
-    transform: perspective(1200px) rotateX(15deg) translateY(50px) scale(0.95);
-    transform-origin: top center;
-    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform: translateY(30px) scale(0.96);
+    transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     position: relative;
     overflow: hidden;
 }
 
 .glass-card.reveal {
     opacity: 1;
-    transform: perspective(1200px) rotateX(0deg) translateY(0deg) scale(1);
+    transform: translateY(0) scale(1);
 }
 
 .navbar-scrolled {
@@ -91,6 +89,17 @@ body.light-mode .navbar-scrolled {
 /* Layout Utilities */
 .section-padding {
     padding: var(--spacing-lg) 0;
+}
+
+#home {
+    padding-top: calc(var(--spacing-lg) + 80px) !important;
+}
+
+@media (max-width: 991px) {
+    #home {
+        padding-top: 110px !important;
+        min-height: auto !important;
+    }
 }
 
 .navbar-glass {
@@ -157,5 +166,5 @@ body.light-mode .form-control {
     color: var(--text-main) !important;
     background-color: transparent !important;
     border-color: var(--primary-color) !important;
-    box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25) !important;
+    box-shadow: 0 0 0 0.25rem rgba(0, 212, 255, 0.25) !important;
 }

@@ -1,8 +1,8 @@
 :root {
-    /* Primary Colors - Sleek Indigo/Violet */
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --secondary-color: #ec4899;
+    /* Primary Colors - Neon Cyan/Blue */
+    --primary-color: #00D4FF;
+    --primary-hover: #0099FF;
+    --secondary-color: #0099FF;
     
     /* Backgrounds */
     --bg-dark: #0f172a;

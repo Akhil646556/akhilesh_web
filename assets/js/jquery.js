@@ -100,42 +100,186 @@ $(function() {
         localStorage.setItem('theme', theme);
     });
 
-    // Project Filtering (Static for now)
+    // Project Filtering
     $(document).on('click', '.filter-btn', function() {
         const filter = $(this).data('filter');
         $('.filter-btn').removeClass('active');
         $(this).addClass('active');
 
         if (filter === 'all') {
-            $('.project-card').fadeIn();
+            $('.project-card').find('.glass-card').addClass('reveal');
+            $('.project-card').stop(true, true).fadeIn(400);
         } else {
-            $('.project-card').hide();
-            $(`.project-card[data-category="${filter}"]`).fadeIn();
+            $('.project-card').stop(true, true).hide();
+            const targetCards = $(`.project-card[data-category="${filter}"]`);
+            targetCards.find('.glass-card').addClass('reveal');
+            targetCards.stop(true, true).fadeIn(400);
         }
+
+        // Recalculate layout positions after cards finish animation
+        setTimeout(function() {
+            cacheLayoutPositions();
+        }, 450);
     });
 
-    // Scroll Reveal Effect
-    const revealOnScroll = function() {
-        $('.glass-card').each(function() {
-            const bottomOfObject = $(this).offset().top + $(this).outerHeight() / 4;
-            const bottomOfWindow = $(window).scrollTop() + $(window).height();
-            if (bottomOfWindow > bottomOfObject) {
-                $(this).addClass('reveal');
+    // Cache section positions and card positions to avoid layout thrashing on scroll
+    let sectionPositions = [];
+    let cardPositions = [];
+
+    function cacheLayoutPositions() {
+        sectionPositions = [];
+        $('section').each(function() {
+            const id = $(this).attr('id');
+            if (id) {
+                sectionPositions.push({
+                    id: id,
+                    top: $(this).offset().top - 150,
+                    bottom: $(this).offset().top + $(this).outerHeight() - 150
+                });
             }
         });
+
+        cardPositions = [];
+        $('.glass-card').each(function() {
+            const card = $(this);
+            const top = card.offset().top;
+            const height = card.outerHeight();
+            cardPositions.push({
+                element: card,
+                revealTop: top + height / 4,
+                revealBottom: top + height + 100
+            });
+        });
+    }
+
+    // Stats Counter Animation
+    let statsAnimated = false;
+    function animateStats(scrollPos) {
+        if (statsAnimated) return;
+        const statsSection = $('#stats');
+        if (!statsSection.length) return;
+        
+        const top = statsSection.offset().top;
+        const windowHeight = $(window).height();
+        
+        if (scrollPos + windowHeight > top + 100) {
+            statsAnimated = true;
+            $('.count-stat').each(function() {
+                const $this = $(this);
+                const target = parseInt($this.data('target'));
+                $({ countNum: 0 }).animate({
+                    countNum: target
+                }, {
+                    duration: 1500,
+                    easing: 'swing',
+                    step: function() {
+                        if (target === 100) {
+                            $this.text(Math.floor(this.countNum) + '%');
+                        } else if (target === 25 || target === 8 || target === 2) {
+                            $this.text(Math.floor(this.countNum) + '+');
+                        } else {
+                            $this.text(Math.floor(this.countNum));
+                        }
+                    },
+                    complete: function() {
+                        if (target === 100) {
+                            $this.text(target + '%');
+                        } else if (target === 25 || target === 8 || target === 2) {
+                            $this.text(target + '+');
+                        } else {
+                            $this.text(target);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    // Scroll Reveal Optimized Function
+    const revealOnScrollOptimized = function(scrollTop) {
+        const bottomOfWindow = scrollTop + $(window).height();
+        for (let i = 0; i < cardPositions.length; i++) {
+            const card = cardPositions[i];
+            // If in view, add reveal class. If out of view, remove it.
+            if (bottomOfWindow > card.revealTop && scrollTop < card.revealBottom) {
+                if (!card.element.hasClass('reveal')) {
+                    card.element.addClass('reveal');
+                }
+            } else {
+                if (card.element.hasClass('reveal')) {
+                    card.element.removeClass('reveal');
+                }
+            }
+        }
     };
 
     $(window).on('scroll', function() {
-        revealOnScroll();
-        if ($(this).scrollTop() > 50) {
+        const scrollPos = $(this).scrollTop();
+        revealOnScrollOptimized(scrollPos);
+        animateStats(scrollPos);
+
+        if (scrollPos > 50) {
             $('.navbar').addClass('navbar-scrolled');
         } else {
             $('.navbar').removeClass('navbar-scrolled');
         }
+
+        // ScrollSpy logic using cached positions
+        if (scrollPos < 100) {
+            if (!$('.navbar-nav a[href="#home"]').hasClass('active')) {
+                $('.navbar-nav a.nav-link').removeClass('active');
+                $('.navbar-nav a[href="#home"]').addClass('active');
+                $('.mobile-bottom-nav a.mobile-nav-item').removeClass('active');
+                $('.mobile-bottom-nav a[href="#home"]').addClass('active');
+            }
+            return;
+        }
+
+        let activeSectionId = null;
+        for (let i = 0; i < sectionPositions.length; i++) {
+            const sec = sectionPositions[i];
+            if (scrollPos >= sec.top && scrollPos < sec.bottom) {
+                activeSectionId = sec.id;
+                break;
+            }
+        }
+
+        if (activeSectionId) {
+            const activeTop = $(`.navbar-nav a[href="#${activeSectionId}"]`);
+            if (!activeTop.hasClass('active')) {
+                $('.navbar-nav a.nav-link').removeClass('active');
+                activeTop.addClass('active');
+            }
+
+            const activeMobile = $(`.mobile-bottom-nav a[href="#${activeSectionId}"]`);
+            if (!activeMobile.hasClass('active')) {
+                $('.mobile-bottom-nav a.mobile-nav-item').removeClass('active');
+                activeMobile.addClass('active');
+            }
+        }
     });
 
-    // Initial check
-    revealOnScroll();
+    // Smooth Scrolling for Mobile Nav Items
+    $(document).on('click', 'a.mobile-nav-item', function(event) {
+        if (this.hash !== "") {
+            event.preventDefault();
+            var hash = this.hash;
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top - 80
+            }, 800);
+        }
+    });
+
+    // Initial cache and run
+    setTimeout(function() {
+        cacheLayoutPositions();
+        revealOnScrollOptimized($(window).scrollTop());
+    }, 200);
+
+    // Recache positions on resize or device change
+    $(window).on('resize', function() {
+        cacheLayoutPositions();
+    });
 
     // ==========================================
     // 3D Particles Background (Code Universe)
