@@ -176,14 +176,14 @@ body.light-mode .card-glare {
 
 .hero-image-bg {
     position: absolute;
-    top: 5%;
-    left: 5%;
-    width: 90%;
-    height: 90%;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    height: 80%;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 50%;
-    filter: blur(25px);
-    opacity: 0.55;
+    border-radius: 2rem;
+    filter: blur(40px);
+    opacity: 0.45;
     animation: pulseGlow 6s ease-in-out infinite alternate;
     z-index: 1;
     pointer-events: none;
@@ -205,34 +205,45 @@ body.light-mode .card-glare {
     animation: floatCard 6s ease-in-out infinite;
 }
 
-/* Spin Ring */
+/* Floating Tech Outlines (replaces Spin Ring) */
 .hero-image-card::before {
     content: '';
     position: absolute;
-    width: 82%;
-    height: 82%;
-    border: 2px dashed rgba(255, 255, 255, 0.25);
-    border-radius: 50%;
-    animation: spinRing 20s linear infinite;
-    transform: translateZ(-10px);
-    z-index: -1;
+    width: 250px;
+    height: 300px;
+    border: 1.5px solid rgba(0, 212, 255, 0.25);
+    border-radius: 2rem;
+    transform: translateZ(-35px) rotate(-6deg);
+    z-index: -3;
     pointer-events: none;
+    transition: var(--transition-smooth);
 }
 
 body.light-mode .hero-image-card::before {
-    border-color: rgba(0, 212, 255, 0.3);
+    border-color: rgba(0, 153, 255, 0.3);
 }
 
+/* Glassmorphic Portrait Panel (replaces Circle radial-gradient) */
 .hero-image-card::after {
     content: '';
     position: absolute;
-    width: 70%;
-    height: 70%;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 255, 0.08) 70%, transparent 100%);
-    border-radius: 50%;
-    transform: translateZ(-15px);
+    width: 250px;
+    height: 300px;
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transform: translateZ(-20px);
     z-index: -2;
     pointer-events: none;
+    transition: var(--transition-smooth);
+}
+
+body.light-mode .hero-image-card::after {
+    border-color: rgba(0, 153, 255, 0.12);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
 
 .hero-image-card.tilting {
@@ -240,21 +251,93 @@ body.light-mode .hero-image-card::before {
     transition: transform 0.08s ease-out !important;
 }
 
+/* Float changes on hover */
+.hero-image-container:hover .hero-image-card::before {
+    transform: translateZ(-45px) rotate(-10deg) scale(1.03);
+    border-color: rgba(0, 212, 255, 0.55);
+}
+
 .hero-image-card img {
-    width: 78%;
-    height: 78%;
+    width: 82%;
+    height: 82%;
     object-fit: contain;
-    transform: translateZ(75px) scale(1.15); /* pushes head forward in 3D */
-    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.5));
+    /* Pushes picture up and forward for out-of-bounds pop effect */
+    transform: translateZ(55px) translateY(-10px) scale(1.18);
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
     transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
     z-index: 3;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 68%, rgba(0, 0, 0, 0.3) 88%, rgba(0, 0, 0, 0) 96%);
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 68%, rgba(0, 0, 0, 0.3) 88%, rgba(0, 0, 0, 0) 96%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.3) 90%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.3) 90%, rgba(0, 0, 0, 0) 100%);
 }
 
 .hero-image-container:hover .hero-image-card img {
-    transform: translateZ(105px) scale(1.22); /* hover pop out further */
+    transform: translateZ(85px) translateY(-20px) scale(1.24); /* hover pop out further */
+}
+
+/* Floating Tech Tags Styles */
+.tech-tag {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    pointer-events: none;
+    z-index: 4;
+    transition: var(--transition-smooth);
+}
+
+body.light-mode .tech-tag {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.tag-django {
+    top: 15%;
+    left: -5%;
+    transform: translateZ(40px);
+}
+
+.tag-react {
+    bottom: 25%;
+    right: -5%;
+    transform: translateZ(70px);
+}
+
+.tag-flutter {
+    top: 55%;
+    left: -12%;
+    transform: translateZ(50px);
+}
+
+.hero-image-container:hover .tag-django {
+    transform: translateZ(70px) translate(-5px, -5px) scale(1.05) !important;
+}
+
+.hero-image-container:hover .tag-react {
+    transform: translateZ(100px) translate(5px, 5px) scale(1.05) !important;
+}
+
+.hero-image-container:hover .tag-flutter {
+    transform: translateZ(80px) translate(-8px, 3px) scale(1.05) !important;
+}
+
+.animate-spin-slow {
+    animation: iconSpin 8s linear infinite;
+}
+
+@keyframes iconSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Animations */

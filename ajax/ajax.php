@@ -140,7 +140,7 @@ HTML;
 HTML;
 
         // Send notification to owner
-        $send_owner = emailsend('akp41998@gmail.com', $owner_subject, $owner_msg, '', '', '');
+        $send_owner = emailsend('akp646556@gmail.com', $owner_subject, $owner_msg, '', '', '');
 
         // Send auto-responder to guest
         $send_guest = emailsend($email, $guest_subject, $guest_msg, '', '', '');

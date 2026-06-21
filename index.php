@@ -13,7 +13,7 @@
                 <div class="d-flex flex-wrap gap-3 align-items-center">
                     <a href="#contact" class="btn btn-premium px-4 py-2.5">Hire Me</a>
                     <a href="#projects" class="btn btn-outline-primary rounded-pill px-4 py-2.5">View Projects</a>
-                    <a href="#contact" class="btn btn-outline-light rounded-pill px-4 py-2.5"><i class="fas fa-download me-2"></i>Download Resume</a>
+                    <a href="assets/Akhilesh_Resume.pdf" download="Akhilesh_Resume.pdf" class="btn btn-outline-light rounded-pill px-4 py-2.5"><i class="fas fa-download me-2"></i>Download Resume</a>
                 </div>
                 <div class="d-flex gap-3 mt-4">
                     <a href="https://www.facebook.com/share/1Cnd76vWm3/" target="_blank" class="social-icon-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -25,6 +25,16 @@
                 <div class="hero-image-container">
                     <div class="hero-image-bg"></div>
                     <div class="hero-image-card">
+                        <!-- Floating Technology Tags -->
+                        <div class="tech-tag tag-django">
+                            <i class="fab fa-python text-warning me-2"></i> Django
+                        </div>
+                        <div class="tech-tag tag-react">
+                            <i class="fab fa-react text-info me-2 animate-spin-slow"></i> React
+                        </div>
+                        <div class="tech-tag tag-flutter">
+                            <i class="fas fa-mobile-alt text-primary me-2"></i> Flutter
+                        </div>
                         <img src="assets/img/akhilesh.png" alt="Akhilesh" class="img-fluid">
                     </div>
                 </div>
@@ -640,7 +650,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section id="testimonials" class="section-padding bg-black bg-opacity-25">
+<!-- <section id="testimonials" class="section-padding bg-black bg-opacity-25">
     <div class="container">
         <h2 class="section-title text-center">Client Testimonials</h2>
         <div class="row g-4 justify-content-center">
@@ -682,7 +692,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Contact Section -->
 <section id="contact" class="section-padding">
