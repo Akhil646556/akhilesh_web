@@ -46,7 +46,7 @@
                 <!-- Quick Social Links (Desktop Only) -->
                 <li class="nav-item ms-lg-3 d-none d-lg-flex gap-2">
                     <a href="https://wa.me/917052547573" target="_blank" class="nav-social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.instagram.com/fighter_akhil_646556?igsh=MWIxcXFvMnFjOXAyaA==" target="_blank" class="nav-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" class="nav-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
                 </li>
                 
                 <!-- CTA Button -->

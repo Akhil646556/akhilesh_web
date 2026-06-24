@@ -105,6 +105,26 @@ header {
   color: white;
   font-size: 18px;
   box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  padding: 3px;
+  transition: var(--transition);
+}
+
+.logo:hover .logo-icon {
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
+  transform: translateY(-2px);
+}
+
+.logo:hover .logo-img {
+  transform: rotate(360deg);
 }
 
 .logo-text {
@@ -113,7 +133,13 @@ header {
   letter-spacing: 1px;
   background: linear-gradient(to right, #fff, var(--accent-cyan));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: var(--transition);
+}
+
+.logo:hover .logo-text {
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
 }
 
 .main-tabs {
@@ -573,6 +599,7 @@ textarea.code-display-block:focus {
 /* Form sliders styling */
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 6px;
   background: var(--bg-primary);
@@ -582,6 +609,7 @@ input[type="range"] {
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -603,6 +631,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 input[type="color"] {
   -webkit-appearance: none;
+  appearance: none;
   border: none;
   width: 36px;
   height: 36px;
@@ -1047,6 +1076,7 @@ input[type="color"]::-webkit-color-swatch {
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1077,6 +1107,7 @@ input[type="color"]::-webkit-color-swatch {
   font-weight: 700;
   background: linear-gradient(to right, #fff, var(--accent-cyan));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1232,6 +1263,7 @@ input[type="color"]::-webkit-color-swatch {
   font-weight: 800;
   background: linear-gradient(to right, white, var(--accent-cyan));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

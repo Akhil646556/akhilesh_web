@@ -3,8 +3,8 @@
 <footer class="section-padding text-center border-top border-secondary">
     <div class="container">
         <div class="d-flex justify-content-center gap-3 mb-3">
-            <a href="https://www.facebook.com/share/1Cnd76vWm3/" target="_blank" class="social-icon-link-footer" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/fighter_akhil_646556?igsh=MWIxcXFvMnFjOXAyaA==" target="_blank" class="social-icon-link-footer" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-icon-link-footer" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" class="social-icon-link-footer" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://wa.me/917052547573" target="_blank" class="social-icon-link-footer" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
         <p class="text-muted mb-0">&copy; <?php echo date("Y"); ?> Akhilesh. All rights reserved.</p>

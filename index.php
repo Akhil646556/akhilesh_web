@@ -16,8 +16,8 @@
                     <a href="assets/Akhilesh_Resume.pdf" download="Akhilesh_Resume.pdf" class="btn btn-outline-light rounded-pill px-4 py-2.5"><i class="fas fa-download me-2"></i>Download Resume</a>
                 </div>
                 <div class="d-flex gap-3 mt-4">
-                    <a href="https://www.facebook.com/share/1Cnd76vWm3/" target="_blank" class="social-icon-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/fighter_akhil_646556?igsh=MWIxcXFvMnFjOXAyaA==" target="_blank" class="social-icon-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" class="social-icon-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" class="social-icon-link" title="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="https://wa.me/917052547573" target="_blank" class="social-icon-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -741,8 +741,8 @@
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="d-flex justify-content-center gap-4 mb-4">
-                    <a href="https://www.facebook.com/share/1Cnd76vWm3/" target="_blank" class="social-icon-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/fighter_akhil_646556?igsh=MWIxcXFvMnFjOXAyaA==" target="_blank" class="social-icon-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" class="social-icon-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" class="social-icon-link" title="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="https://wa.me/917052547573" target="_blank" class="social-icon-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
                 <div class="glass-card">
