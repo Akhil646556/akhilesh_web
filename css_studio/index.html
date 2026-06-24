@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Studio - Interactive practice suite</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">CSS Studio</span>
+    </div>
+    
+    <nav class="main-tabs">
+      <button class="tab-btn active" data-tab="sandbox">
+        <i class="fas fa-laptop-code"></i> Sandbox
+      </button>
+      <button class="tab-btn" data-tab="classroom">
+        <i class="fas fa-chalkboard-teacher"></i> Classroom
+      </button>
+      <button class="tab-btn" data-tab="cheatsheet">
+        <i class="fab fa-css3-alt"></i> CSS Reference
+      </button>
+      <button class="tab-btn" data-tab="html-reference">
+        <i class="fab fa-html5"></i> HTML Reference
+      </button>
+      <button class="tab-btn" data-tab="designs-hub">
+        <i class="fas fa-layer-group"></i> Designs Hub
+      </button>
+      <button class="tab-btn" data-tab="generators">
+        <i class="fas fa-sliders-h"></i> Generators
+      </button>
+      <button class="tab-btn" data-tab="challenges">
+        <i class="fas fa-trophy"></i> Challenges
+      </button>
+    </nav>
+
+    <div class="social-links">
+      <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="btn-secondary" style="text-decoration:none">
+        <i class="fab fa-chrome"></i> MDN Docs
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Panels Area -->
+  <main>
+    
+    <!-- 1. LIVE SANDBOX TAB -->
+    <section id="sandbox-panel" class="tab-panel active">
+      <div class="editor-pane">
+        <div class="pane-header">
+          <div class="pane-title"><i class="fas fa-edit"></i> Code Editor</div>
+          <div class="editor-selector">
+            <button class="editor-tab active" id="sb-html-btn">HTML</button>
+            <button class="editor-tab" id="sb-css-btn">CSS</button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <select class="template-select" id="sb-template-select">
+              <option value="" disabled selected>Templates</option>
+              <option value="blank">Blank Area</option>
+              <option value="button">Neon & Glass Buttons</option>
+              <option value="tooltip">Pure CSS Tooltip</option>
+            </select>
+            <button class="btn-secondary" id="sb-copy-btn" title="Copy Current File Code"><i class="fas fa-copy"></i></button>
+            <button class="btn-secondary" id="sb-clear-btn" title="Reset Sandbox Code"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+        <div class="editor-body">
+          <!-- HTML Textarea wrapper -->
+          <div class="editor-wrapper active" id="sb-html-wrapper">
+            <div class="line-numbers" id="sb-html-lines"></div>
+            <textarea class="code-textarea" id="sb-html-code" spellcheck="false" autocomplete="off" placeholder="<!-- Write your HTML structure here -->"></textarea>
+          </div>
+          <!-- CSS Textarea wrapper -->
+          <div class="editor-wrapper" id="sb-css-wrapper">
+            <div class="line-numbers" id="sb-css-lines"></div>
+            <textarea class="code-textarea" id="sb-css-code" spellcheck="false" autocomplete="off" placeholder="/* Write your custom CSS styles here */"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-pane">
+        <div class="pane-header">
+          <div class="pane-title"><i class="fas fa-eye"></i> Visual Preview</div>
+          <div class="preview-actions">
+            <div class="screen-toggle">
+              <button class="screen-btn active" data-size="desktop" title="Desktop View"><i class="fas fa-desktop"></i></button>
+              <button class="screen-btn" data-size="tablet" title="Tablet View"><i class="fas fa-tablet-alt"></i></button>
+              <button class="screen-btn" data-size="mobile" title="Mobile View"><i class="fas fa-mobile-alt"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="preview-container">
+          <iframe id="sandbox-iframe" class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL GENERATORS TAB -->
+    <section id="generators-panel" class="tab-panel">
+      <div class="generators-sidebar">
+        <span class="sidebar-heading">Layouts</span>
+        <div class="gen-menu-item active" data-gen="flexbox">
+          <i class="fas fa-layer-group"></i> Flexbox
+        </div>
+        <div class="gen-menu-item" data-gen="grid">
+          <i class="fas fa-th"></i> CSS Grid
+        </div>
+        
+        <span class="sidebar-heading" style="margin-top:16px">Effects & Stylings</span>
+        <div class="gen-menu-item" data-gen="glassmorphism">
+          <i class="fas fa-glass-martini-alt"></i> Glassmorphism
+        </div>
+        <div class="gen-menu-item" data-gen="shadow">
+          <i class="fas fa-adjust"></i> Box Shadow
+        </div>
+        <div class="gen-menu-item" data-gen="radius">
+          <i class="fas fa-border-all"></i> Border Radius
+        </div>
+        <div class="gen-menu-item" data-gen="gradient">
+          <i class="fas fa-palette"></i> Gradients
+        </div>
+        <div class="gen-menu-item" data-gen="transform">
+          <i class="fas fa-cube"></i> Transforms & Filters
+        </div>
+      </div>
+      
+      <div class="generator-content-area">
+        
+        <!-- FLEXBOX GENERATOR -->
+        <div class="generator-workspace active" id="flexbox-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="control-label">Boxes Count</label>
+              <div class="btn-grid">
+                <button class="option-btn" id="flex-add-box"><i class="fas fa-plus"></i> Add Box</button>
+                <button class="option-btn" id="flex-remove-box"><i class="fas fa-minus"></i> Remove Box</button>
+              </div>
+            </div>
+            
+            <div class="control-group">
+              <label class="control-label">flex-direction</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-flex-prop="direction" data-val="row">row</button>
+                <button class="option-btn" data-flex-prop="direction" data-val="row-reverse">row-rev</button>
+                <button class="option-btn" data-flex-prop="direction" data-val="column">column</button>
+                <button class="option-btn" data-flex-prop="direction" data-val="column-reverse">col-rev</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">justify-content</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-flex-prop="justify" data-val="flex-start">flex-start</button>
+                <button class="option-btn" data-flex-prop="justify" data-val="flex-end">flex-end</button>
+                <button class="option-btn" data-flex-prop="justify" data-val="center">center</button>
+                <button class="option-btn" data-flex-prop="justify" data-val="space-between">space-between</button>
+                <button class="option-btn" data-flex-prop="justify" data-val="space-around">space-around</button>
+                <button class="option-btn" data-flex-prop="justify" data-val="space-evenly">space-evenly</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">align-items</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-flex-prop="align" data-val="stretch">stretch</button>
+                <button class="option-btn" data-flex-prop="align" data-val="flex-start">flex-start</button>
+                <button class="option-btn" data-flex-prop="align" data-val="flex-end">flex-end</button>
+                <button class="option-btn" data-flex-prop="align" data-val="center">center</button>
+                <button class="option-btn" data-flex-prop="align" data-val="baseline">baseline</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">flex-wrap</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-flex-prop="wrap" data-val="nowrap">nowrap</button>
+                <button class="option-btn" data-flex-prop="wrap" data-val="wrap">wrap</button>
+                <button class="option-btn" data-flex-prop="wrap" data-val="wrap-reverse">wrap-reverse</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">gap <span class="value-bubble" id="flex-gap-val">15px</span></label>
+              <input type="range" id="flex-gap-slider" min="0" max="50" value="15">
+            </div>
+
+            <!-- Individual Item config (Hidden by default until box is clicked) -->
+            <div class="flex-item-settings" id="flex-item-panel">
+              <h4 id="flex-item-title" style="color:var(--accent-cyan); font-size:13px; margin-bottom:8px">Configure Box 1</h4>
+              
+              <div class="control-group">
+                <label class="control-label">flex-grow <span class="value-bubble" id="item-grow-val">0</span></label>
+                <input type="range" id="item-grow-slider" min="0" max="5" value="0">
+              </div>
+              
+              <div class="control-group">
+                <label class="control-label">flex-shrink <span class="value-bubble" id="item-shrink-val">1</span></label>
+                <input type="range" id="item-shrink-slider" min="0" max="5" value="1">
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">align-self</label>
+                <div class="btn-grid-3">
+                  <button class="option-btn active" data-flex-item-prop="self" data-val="auto">auto</button>
+                  <button class="option-btn" data-flex-item-prop="self" data-val="flex-start">start</button>
+                  <button class="option-btn" data-flex-item-prop="self" data-val="center">center</button>
+                  <button class="option-btn" data-flex-item-prop="self" data-val="flex-end">end</button>
+                  <button class="option-btn" data-flex-item-prop="self" data-val="stretch">stretch</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Flexbox Playground</span>
+            <div class="visual-preview-box">
+              <div class="flex-stage-container" id="flex-stage"></div>
+            </div>
+            
+            <!-- Output Code block -->
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="flexbox-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="flexbox-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="flexbox-code-display" placeholder="Edit flexbox styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CSS GRID GENERATOR -->
+        <div class="generator-workspace" id="grid-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="control-label">Grid Columns <span class="value-bubble" id="grid-col-val">3</span></label>
+              <input type="range" id="grid-col-slider" min="1" max="6" value="3">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Grid Rows <span class="value-bubble" id="grid-row-val">2</span></label>
+              <input type="range" id="grid-row-slider" min="1" max="5" value="2">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Grid Gap <span class="value-bubble" id="grid-gap-val">15px</span></label>
+              <input type="range" id="grid-gap-slider" min="0" max="50" value="15">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">align-items</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-grid-prop="align-items" data-val="stretch">stretch</button>
+                <button class="option-btn" data-grid-prop="align-items" data-val="start">start</button>
+                <button class="option-btn" data-grid-prop="align-items" data-val="end">end</button>
+                <button class="option-btn" data-grid-prop="align-items" data-val="center">center</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">justify-items</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-grid-prop="justify-items" data-val="stretch">stretch</button>
+                <button class="option-btn" data-grid-prop="justify-items" data-val="start">start</button>
+                <button class="option-btn" data-grid-prop="justify-items" data-val="end">end</button>
+                <button class="option-btn" data-grid-prop="justify-items" data-val="center">center</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Grid Playground</span>
+            <div class="visual-preview-box">
+              <div class="grid-stage-container" id="grid-stage"></div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="grid-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="grid-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="grid-code-display" placeholder="Edit grid styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GLASSMORPHISM GENERATOR -->
+        <div class="generator-workspace" id="glassmorphism-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="control-label">Blur Radius <span class="value-bubble" id="glass-blur-val">12px</span></label>
+              <input type="range" id="glass-blur-slider" min="0" max="30" value="12">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Background Opacity <span class="value-bubble" id="glass-opacity-val">0.05</span></label>
+              <input type="range" id="glass-opacity-slider" min="0" max="1" step="0.05" value="0.05">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Background Color</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="glass-color-picker" value="#ffffff">
+                <span style="font-size:12px; color:var(--text-muted)">Pick custom base color</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Border Opacity <span class="value-bubble" id="glass-border-val">0.15</span></label>
+              <input type="range" id="glass-border-slider" min="0" max="1" step="0.05" value="0.15">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Border Radius <span class="value-bubble" id="glass-radius-val">16px</span></label>
+              <input type="range" id="glass-radius-slider" min="0" max="50" value="16">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Box Shadow <span class="value-bubble" id="glass-shadow-val">20%</span></label>
+              <input type="range" id="glass-shadow-slider" min="0" max="100" value="20">
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Glassmorphism View</span>
+            <div class="visual-preview-box" style="background:#0a0b0e">
+              <div class="glass-visual-bg">
+                <div class="glass-blob blob-1"></div>
+                <div class="glass-blob blob-2"></div>
+                <div class="glass-blob blob-3"></div>
+              </div>
+              
+              <div class="glass-target-card" id="glass-card-element">
+                <h3>Frosted glass</h3>
+                <p>A beautiful aesthetic combining transparency, drop shadows, and backdrop blur.</p>
+                <button class="glass-btn">Explore</button>
+              </div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="glassmorphism-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="glassmorphism-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="glassmorphism-code-display" placeholder="Edit glassmorphism styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX SHADOW GENERATOR -->
+        <div class="generator-workspace" id="shadow-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="checkbox-wrapper">
+                <input type="checkbox" id="shadow-inset">
+                <span>inset shadow</span>
+              </label>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Offset-X <span class="value-bubble" id="shadow-x-val">0px</span></label>
+              <input type="range" id="shadow-x" min="-50" max="50" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Offset-Y <span class="value-bubble" id="shadow-y-val">10px</span></label>
+              <input type="range" id="shadow-y" min="-50" max="50" value="10">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Blur Radius <span class="value-bubble" id="shadow-blur-val">25px</span></label>
+              <input type="range" id="shadow-blur" min="0" max="100" value="25">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Spread Radius <span class="value-bubble" id="shadow-spread-val">-5px</span></label>
+              <input type="range" id="shadow-spread" min="-50" max="50" value="-5">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Shadow Color</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="shadow-color" value="#000000">
+                <span style="font-size:12px; color:var(--text-muted)">Choose shadow color</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Shadow Opacity <span class="value-bubble" id="shadow-opacity-val">0.3</span></label>
+              <input type="range" id="shadow-opacity" min="0" max="1" step="0.05" value="0.3">
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Box Shadow Preview</span>
+            <div class="visual-preview-box">
+              <div class="shadow-target-box" id="shadow-target"></div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="shadow-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="shadow-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="shadow-code-display" placeholder="Edit shadow styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BORDER RADIUS GENERATOR -->
+        <div class="generator-workspace" id="radius-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="control-label">Unit Type</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-radius-unit="px">pixels (px)</button>
+                <button class="option-btn" data-radius-unit="%">percentage (%)</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Top-Left Corner <span class="value-bubble" id="radius-tl-val">16px</span></label>
+              <input type="range" id="radius-tl" min="0" max="150" value="16">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Top-Right Corner <span class="value-bubble" id="radius-tr-val">16px</span></label>
+              <input type="range" id="radius-tr" min="0" max="150" value="16">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Bottom-Right Corner <span class="value-bubble" id="radius-br-val">16px</span></label>
+              <input type="range" id="radius-br" min="0" max="150" value="16">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Bottom-Left Corner <span class="value-bubble" id="radius-bl-val">16px</span></label>
+              <input type="range" id="radius-bl" min="0" max="150" value="16">
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Border Radius Preview</span>
+            <div class="visual-preview-box">
+              <div class="radius-target-box" id="radius-target"></div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="radius-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="radius-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="radius-code-display" placeholder="Edit border radius styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRADIENTS GENERATOR -->
+        <div class="generator-workspace" id="gradient-gen">
+          <div class="generator-controls">
+            <div class="control-group">
+              <label class="control-label">Gradient Type</label>
+              <div class="btn-grid">
+                <button class="option-btn active" data-grad-prop="type" data-val="linear">Linear</button>
+                <button class="option-btn" data-grad-prop="type" data-val="radial">Radial</button>
+              </div>
+            </div>
+
+            <div class="control-group" id="grad-angle-ctrl">
+              <label class="control-label">Linear Angle <span class="value-bubble" id="grad-angle-val">135°</span></label>
+              <input type="range" id="grad-angle" min="0" max="360" value="135">
+            </div>
+
+            <div style="border-top:1px solid var(--border-color); padding-top:15px"></div>
+
+            <div class="control-group">
+              <label class="control-label">Color Stop 1</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="grad-c1" value="#00f2fe">
+                <input type="range" id="grad-c1-pos" min="0" max="100" value="0" style="flex:1">
+                <span class="value-bubble" id="grad-c1-pos-val">0%</span>
+              </div>
+            </div>
+
+            <div class="control-group" style="margin-top:10px">
+              <label class="control-label">Color Stop 2</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="grad-c2" value="#7f00ff">
+                <input type="range" id="grad-c2-pos" min="0" max="100" value="100" style="flex:1">
+                <span class="value-bubble" id="grad-c2-pos-val">100%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Gradient Backdrop</span>
+            <div class="visual-preview-box">
+              <div class="gradient-target-box" id="gradient-target"></div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="gradient-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="gradient-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="gradient-code-display" placeholder="Edit gradient styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSFORMS & FILTERS GENERATOR -->
+        <div class="generator-workspace" id="transform-gen">
+          <div class="generator-controls">
+            <span class="sidebar-heading" style="padding-left:0">Transforms</span>
+            
+            <div class="control-group">
+              <label class="control-label">Rotate <span class="value-bubble" id="tr-rotate-val">0deg</span></label>
+              <input type="range" id="tr-rotate" min="-180" max="180" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Scale <span class="value-bubble" id="tr-scale-val">1</span></label>
+              <input type="range" id="tr-scale" min="0.5" max="1.8" step="0.1" value="1">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Translate X <span class="value-bubble" id="tr-translate-x-val">0px</span></label>
+              <input type="range" id="tr-translate-x" min="-100" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Translate Y <span class="value-bubble" id="tr-translate-y-val">0px</span></label>
+              <input type="range" id="tr-translate-y" min="-100" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Skew X <span class="value-bubble" id="tr-skew-x-val">0deg</span></label>
+              <input type="range" id="tr-skew-x" min="-45" max="45" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Skew Y <span class="value-bubble" id="tr-skew-y-val">0deg</span></label>
+              <input type="range" id="tr-skew-y" min="-45" max="45" value="0">
+            </div>
+
+            <span class="sidebar-heading" style="padding-left:0; margin-top:15px; border-top:1px solid var(--border-color); padding-top:15px">Filters</span>
+
+            <div class="control-group">
+              <label class="control-label">Blur <span class="value-bubble" id="tr-blur-val">0px</span></label>
+              <input type="range" id="tr-blur" min="0" max="15" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Brightness <span class="value-bubble" id="tr-brightness-val">100%</span></label>
+              <input type="range" id="tr-brightness" min="0" max="200" value="100">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Contrast <span class="value-bubble" id="tr-contrast-val">100%</span></label>
+              <input type="range" id="tr-contrast" min="0" max="200" value="100">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Grayscale <span class="value-bubble" id="tr-grayscale-val">0%</span></label>
+              <input type="range" id="tr-grayscale" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Hue Rotate <span class="value-bubble" id="tr-hue-rotate-val">0deg</span></label>
+              <input type="range" id="tr-hue-rotate" min="0" max="360" value="0">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Saturate <span class="value-bubble" id="tr-saturate-val">100%</span></label>
+              <input type="range" id="tr-saturate" min="0" max="200" value="100">
+            </div>
+          </div>
+          
+          <div class="generator-stage">
+            <span class="canvas-title">Transform Stage</span>
+            <div class="visual-preview-box">
+              <div class="transform-visual-stage">
+                <div class="transform-target-box" id="transform-target">CSS transform</div>
+              </div>
+            </div>
+
+            <div class="code-output-card">
+              <div class="code-card-header">
+                <span class="code-title">Generated CSS Code</span>
+                <div class="code-actions">
+                  <button class="btn-secondary" id="transform-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                  <button class="btn-secondary" id="transform-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                </div>
+              </div>
+              <div class="code-card-body">
+                <textarea class="code-display-block" id="transform-code-display" placeholder="Edit transform styles..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. INTERACTIVE CHALLENGES TAB -->
+    <section id="challenges-panel" class="tab-panel">
+      <!-- Sidebar containing challenges list -->
+      <div class="challenges-list-pane">
+        <div class="challenges-list-header">
+          <h2>CSS Quests</h2>
+          <p>Complete challenges to master properties.</p>
+        </div>
+        <div class="challenge-cards-container" id="challenge-cards">
+          <!-- Populated by script -->
+        </div>
+      </div>
+      
+      <!-- Challenge Workspace area -->
+      <div class="challenge-workspace-pane">
+        <div class="challenge-details">
+          <h2 id="ch-title">Centering a Div</h2>
+          <p class="challenge-desc" id="ch-desc">Center the child element both horizontally and vertically inside the parent element.</p>
+          
+          <div class="instruction-section">
+            <span class="instruction-title">Instructions</span>
+            <ul class="instruction-list" id="ch-instructions">
+              <li>Add display: flex to the parent element.</li>
+              <li>Add justify-content: center.</li>
+            </ul>
+          </div>
+          
+          <div style="margin-top: auto">
+            <button class="btn-verify" id="verify-btn">
+              <i class="fas fa-play"></i> RUN VALIDATION
+            </button>
+            <div class="validation-output" id="validation-result"></div>
+          </div>
+        </div>
+
+        <div class="challenge-editor-preview">
+          <!-- Split code editor -->
+          <div class="challenge-editor-pane">
+            <div class="pane-header">
+              <div class="pane-title"><i class="fas fa-code"></i> Workspace CSS</div>
+              <button class="btn-secondary" id="ch-reset-btn" title="Reset Challenge"><i class="fas fa-undo"></i> Reset</button>
+            </div>
+            
+            <div class="editor-body">
+              <div class="line-numbers" id="ch-css-lines"></div>
+              <textarea class="code-textarea" id="ch-css-code" spellcheck="false" autocomplete="off" style="background:var(--bg-tertiary)"></textarea>
+              
+              <!-- Hidden HTML textarea, as users only edit the CSS -->
+              <textarea id="ch-html-code" style="display:none"></textarea>
+              <div id="ch-html-lines" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Challenge visual result iframe -->
+          <div class="challenge-preview-pane">
+            <div class="pane-header" style="background:transparent; border-bottom:none; padding: 0 0 10px 0;">
+              <div class="pane-title"><i class="fas fa-desktop"></i> Render Canvas</div>
+            </div>
+            <div class="challenge-iframe-wrapper">
+              <iframe id="challenge-iframe" class="preview-iframe" style="background:#0f172a"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CSS PROPERTIES EXPLORER TAB -->
+    <section id="cheatsheet-panel" class="tab-panel">
+      <div class="explorer-container">
+        <!-- Left Sidebar: Categorized list of all CSS properties -->
+        <div class="explorer-sidebar">
+          <div class="explorer-search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="explorer-search" placeholder="Search properties...">
+          </div>
+          <div class="explorer-property-tree" id="explorer-list-tree">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Right Pane: Interactive workspace for the active property -->
+        <div class="explorer-details-pane">
+          <div class="explorer-empty-state" id="explorer-empty-msg">
+            <i class="fas fa-hand-pointer"></i>
+            <h3>Select a CSS Property</h3>
+            <p>Choose any property from the sidebar list to see its description, play with live controls, and copy style rules.</p>
+          </div>
+          
+          <div class="explorer-content" id="explorer-active-content" style="display:none">
+            <div class="explorer-header">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h2 id="explorer-prop-name">border-radius</h2>
+                <span class="challenge-badge" id="explorer-prop-category">Borders & Corners</span>
+              </div>
+              <p class="explorer-desc" id="explorer-prop-desc">Rounds the corners of an element's outer border edge.</p>
+            </div>
+            
+            <div class="explorer-workspace-grid">
+              <!-- Controls Column -->
+              <div class="explorer-controls-card">
+                <h4 class="sidebar-heading" style="padding-left:0; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">Property Values</h4>
+                <div class="explorer-controls-list" id="explorer-prop-controls">
+                  <!-- Rendered dynamically by JS -->
+                </div>
+              </div>
+              
+              <!-- Preview Column -->
+              <div class="explorer-preview-card">
+                <span class="sidebar-heading" style="padding-left:0; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">Visual Preview</span>
+                <div class="explorer-canvas-box" id="explorer-preview-box">
+                  <!-- Content Rendered dynamically by JS -->
+                </div>
+                
+                <!-- Output Code Card -->
+                <div class="code-output-card" style="margin-top:20px; max-width:100%">
+                  <div class="code-card-header">
+                    <span class="code-title">CSS Declaration</span>
+                    <div class="code-actions">
+                      <button class="btn-secondary" id="explorer-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                      <button class="btn-secondary" id="explorer-copy-code"><i class="fas fa-copy"></i> Copy CSS</button>
+                    </div>
+                  </div>
+                  <div class="code-card-body">
+                    <textarea class="code-display-block" id="explorer-code-display" placeholder="Edit CSS declarations..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CSS CLASSROOM TAB -->
+    <section id="classroom-panel" class="tab-panel">
+      <div class="classroom-container">
+        <!-- Sidebar: Chapters and Lessons -->
+        <div class="classroom-sidebar">
+          <div class="classroom-sidebar-header">
+            <h3>CSS Syllabus A-Z</h3>
+            <p>Select a lesson to begin teaching</p>
+          </div>
+          <div class="classroom-syllabus-tree" id="classroom-syllabus-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Main Workspace: Lesson content & Practice -->
+        <div class="classroom-content-pane">
+          <!-- Empty State -->
+          <div class="classroom-empty-state" id="classroom-empty-msg">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>Welcome to CSS Classroom!</h3>
+            <p>Select a lesson from the syllabus on the left to display explanations, teacher notes, live examples, and interactive student tests.</p>
+          </div>
+
+          <!-- Active Lesson Content -->
+          <div class="classroom-lesson-view" id="classroom-active-lesson" style="display:none">
+            <div class="lesson-header-row">
+              <div class="lesson-header-meta">
+                <span class="lesson-chapter" id="lesson-chapter-title">Chapter 1</span>
+                <h2 class="lesson-title" id="lesson-active-title">Basic Selectors</h2>
+              </div>
+              <div class="lesson-actions">
+                <button class="btn-classroom-toggle" id="btn-presentation-mode" title="Toggle Presentation Mode">
+                  <i class="fas fa-expand"></i> Presentation Mode
+                </button>
+                <div class="classroom-progress-wrapper">
+                  <label class="checkbox-wrapper">
+                    <input type="checkbox" id="lesson-completed-checkbox">
+                    <span>Lesson Completed</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="classroom-workspace-grid">
+              <!-- Lesson Left Column: Explanation and Teacher Prompts -->
+              <div class="lesson-info-column">
+                <div class="info-card">
+                  <div class="card-header-icon"><i class="fas fa-book-reader"></i> Explanation</div>
+                  <div class="lesson-body-text" id="lesson-explanation">
+                    <!-- Loaded dynamically -->
+                  </div>
+                </div>
+
+                <!-- Teacher Prompts (Dialogue points) -->
+                <div class="info-card teacher-prompts-card" id="teacher-prompts-container">
+                  <div class="card-header-icon"><i class="fas fa-comment-dots"></i> Teacher's Guide</div>
+                  <ul class="teacher-prompts-list" id="lesson-teacher-prompts">
+                    <!-- Loaded dynamically -->
+                  </ul>
+                  <div class="presentation-zoom-ctrls">
+                    <span style="font-size:12px; color:var(--text-muted)">Projector Text Size:</span>
+                    <button class="btn-zoom" id="btn-zoom-in"><i class="fas fa-plus"></i></button>
+                    <button class="btn-zoom" id="btn-zoom-out"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lesson Right Column: Live Testing Arena -->
+              <div class="lesson-playground-column">
+                <div class="playground-card-header">
+                  <span class="playground-title"><i class="fas fa-laptop-code"></i> Live Testing Arena</span>
+                  <div class="playground-actions">
+                    <button class="btn-secondary btn-sm" id="lesson-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                    <button class="btn-secondary btn-sm" id="lesson-reset-code"><i class="fas fa-undo"></i> Reset</button>
+                  </div>
+                </div>
+
+                <!-- Splitted Editor and Preview -->
+                <div class="lesson-arena-split">
+                  <div class="lesson-editor-wrapper">
+                    <div class="arena-tabs">
+                      <button class="arena-tab active" id="lesson-css-tab-btn">CSS</button>
+                      <button class="arena-tab" id="lesson-html-tab-btn">HTML (Read Only)</button>
+                    </div>
+                    <div class="arena-editor-body">
+                      <div class="line-numbers" id="lesson-code-lines"></div>
+                      <textarea class="code-textarea" id="lesson-code-editor" spellcheck="false" autocomplete="off"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="lesson-preview-wrapper">
+                    <div class="arena-tabs">
+                      <span class="arena-tab-title"><i class="fas fa-eye"></i> Result Preview</span>
+                    </div>
+                    <div class="arena-preview-body">
+                      <iframe id="lesson-preview-iframe" class="preview-iframe"></iframe>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Live Validation Guidelines -->
+                <div class="lesson-validation-card">
+                  <h4>Student Objective / Live Test</h4>
+                  <ul class="validation-guidelines" id="lesson-validation-guidelines">
+                    <!-- Loaded dynamically -->
+                  </ul>
+                  <div class="validation-action-row">
+                    <button class="btn-verify" id="lesson-verify-btn" style="width: auto; padding: 10px 20px;">
+                      <i class="fas fa-play"></i> RUN VALIDATION
+                    </button>
+                    <div class="validation-output" id="lesson-validation-result"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. HTML REFERENCE TAB -->
+    <section id="html-reference-panel" class="tab-panel">
+      <div class="explorer-container">
+        <!-- Left Sidebar: Categorized list of all HTML tags -->
+        <div class="explorer-sidebar">
+          <div class="explorer-search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="html-search" placeholder="Search HTML tags...">
+          </div>
+          <div class="explorer-property-tree" id="html-list-tree">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Right Pane: Interactive workspace for the active HTML tag -->
+        <div class="explorer-details-pane">
+          <div class="explorer-empty-state" id="html-empty-msg">
+            <i class="fas fa-code"></i>
+            <h3>Select an HTML Tag</h3>
+            <p>Choose any tag from the sidebar list to see its description, adjust attributes, and see live generated markup code.</p>
+          </div>
+          
+          <div class="explorer-content" id="html-active-content" style="display:none">
+            <div class="explorer-header">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h2 id="html-tag-name">&lt;table&gt;</h2>
+                <span class="challenge-badge" id="html-tag-category">Tables & Grids</span>
+              </div>
+              <p class="explorer-desc" id="html-tag-desc">Defines an HTML table structure.</p>
+            </div>
+            
+            <div class="explorer-workspace-grid">
+              <!-- Controls Column -->
+              <div class="explorer-controls-card">
+                <h4 class="sidebar-heading" style="padding-left:0; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">Attributes & Options</h4>
+                <div class="explorer-controls-list" id="html-tag-controls">
+                  <!-- Rendered dynamically by JS -->
+                </div>
+              </div>
+              
+              <!-- Preview Column -->
+              <div class="explorer-preview-card">
+                <span class="sidebar-heading" style="padding-left:0; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">Rendered Preview</span>
+                <div class="explorer-canvas-box" id="html-preview-box">
+                  <!-- Content Rendered dynamically by JS -->
+                </div>
+                
+                <!-- Output Code Card -->
+                <div class="code-output-card" style="margin-top:20px; max-width:100%">
+                  <div class="code-card-header">
+                    <span class="code-title">HTML Markup</span>
+                    <div class="code-actions">
+                      <button class="btn-secondary" id="html-open-sandbox"><i class="fas fa-external-link-alt"></i> Open Sandbox</button>
+                      <button class="btn-secondary" id="html-copy-code"><i class="fas fa-copy"></i> Copy HTML</button>
+                    </div>
+                  </div>
+                  <div class="code-card-body">
+                    <textarea class="code-display-block" id="html-code-display" placeholder="Edit HTML markup..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. DESIGNS HUB TAB (COMBINED HTML + CSS) -->
+    <section id="designs-hub-panel" class="tab-panel">
+      <div class="explorer-container">
+        <!-- Left Sidebar: Categories of Layouts -->
+        <div class="explorer-sidebar">
+          <div class="classroom-sidebar-header">
+            <h3>Layouts & Designs</h3>
+            <p>Combine HTML & CSS examples</p>
+          </div>
+          <div class="explorer-property-tree" id="designs-list-tree">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Right Pane: Interactive workspace for the active Design -->
+        <div class="explorer-details-pane">
+          <div class="explorer-empty-state" id="designs-empty-msg">
+            <i class="fas fa-layer-group"></i>
+            <h3>Select a Design Layout</h3>
+            <p>Choose any layout to view its responsive visual result, and inspect its side-by-side HTML and CSS source codes.</p>
+          </div>
+          
+          <div class="explorer-content" id="designs-active-content" style="display:none">
+            <div class="explorer-header" style="border-bottom: 1px solid var(--border-color); padding-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h2 id="designs-layout-title">Glassmorphism Card</h2>
+                <span class="challenge-badge" id="designs-layout-category">Components</span>
+              </div>
+              <p class="explorer-desc" id="designs-layout-desc" style="margin-bottom: 10px;">A sleek component using glassmorphism effects.</p>
+              <div style="font-size:12px; color: var(--text-dark); background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                <strong>Layout Notes:</strong> <span id="designs-layout-notes"></span>
+              </div>
+            </div>
+            
+            <div class="explorer-workspace-grid" style="grid-template-columns: 1.15fr 0.85fr;">
+              <!-- Left Preview Column -->
+              <div class="explorer-preview-card">
+                <span class="sidebar-heading" style="padding-left:0; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">Visual Preview</span>
+                <div class="explorer-canvas-box" style="height: 400px; padding: 0; background: #0b0f17; display:block;">
+                  <iframe id="designs-preview-iframe" style="width:100%; height:100%; border:none; display:block;"></iframe>
+                </div>
+                <div style="margin-top: 15px; display:flex; justify-content:flex-end;">
+                  <button class="btn-verify" id="designs-open-sandbox" style="width:auto;"><i class="fas fa-external-link-alt"></i> Open in Sandbox</button>
+                </div>
+              </div>
+
+              <!-- Right Column (with Tabs for HTML, CSS, and Visual Designer) -->
+              <div class="explorer-controls-card" style="display:flex; flex-direction:column; height:100%;">
+                <div style="display:flex; gap:10px; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px">
+                  <button class="btn-tab active" id="designs-html-btn" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-weight:600; font-size:13px; padding:4px 8px;">HTML Code</button>
+                  <button class="btn-tab" id="designs-css-btn" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-weight:600; font-size:13px; padding:4px 8px;">CSS Code</button>
+                  <button class="btn-tab" id="designs-designer-btn" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-weight:600; font-size:13px; padding:4px 8px;">Visual Designer</button>
+                </div>
+                
+                <!-- Code Editors Pane -->
+                <div class="code-output-card" id="designs-editors-pane" style="flex:1; display:flex; flex-direction:column; max-width:100%; margin-top:0; height:340px;">
+                  <div class="code-card-header">
+                    <span class="code-title" id="designs-code-type-title">HTML Editor (Live)</span>
+                    <button class="btn-secondary" id="designs-copy-code" style="padding: 4px 8px; font-size:11px;"><i class="fas fa-copy"></i> Copy</button>
+                  </div>
+                  <div class="code-card-body" style="flex:1; overflow:hidden; padding:0;">
+                    <textarea id="designs-code-editor" style="width: 100%; height: 100%; background: #0c0f16; border: none; color: #c9d1d9; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.5; padding: 16px; outline: none; resize: none; box-sizing: border-box; tab-size: 2;" placeholder="Edit template code live..."></textarea>
+                  </div>
+                </div>
+
+                <!-- Visual Designer Panel -->
+                <div id="designs-designer-panel" style="display:none; flex:1; overflow-y:auto; padding-right:5px;">
+                  <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:11.5px; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:6px;">Select Element to Design</label>
+                    <select id="designs-element-select" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:white; padding:10px; border-radius:8px; outline:none; font-family:var(--font-mono); font-size:13px; cursor:pointer;">
+                      <!-- Populated dynamically by JS -->
+                    </select>
+                  </div>
+
+                  <div class="designer-controls-group" style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- Typography Group -->
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:14px; border-radius:8px;">
+                      <h5 style="margin:0 0 12px 0; color:var(--accent-cyan); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Typography</h5>
+                      <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Font Size</span>
+                            <span id="designer-font-val">16px</span>
+                          </div>
+                          <input type="range" id="designer-font-size" min="10" max="60" value="16" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                        <div>
+                          <label style="display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;">Text Color</label>
+                          <input type="color" id="designer-color" value="#ffffff" style="width:100%; height:36px; border:none; border-radius:4px; cursor:pointer; background:transparent;">
+                        </div>
+                        <div>
+                          <label style="display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;">Text Align</label>
+                          <select id="designer-align" style="width:100%; background:var(--bg-secondary); border:1px solid var(--border-color); color:white; padding:8px; border-radius:6px; font-size:12px;">
+                            <option value="">Default</option>
+                            <option value="left">Left</option>
+                            <option value="center">Center</option>
+                            <option value="right">Right</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Layout & Spacing Group -->
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:14px; border-radius:8px;">
+                      <h5 style="margin:0 0 12px 0; color:var(--accent-cyan); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Spacing & Size</h5>
+                      <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Padding</span>
+                            <span id="designer-padding-val">15px</span>
+                          </div>
+                          <input type="range" id="designer-padding" min="0" max="100" value="15" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Margin</span>
+                            <span id="designer-margin-val">0px</span>
+                          </div>
+                          <input type="range" id="designer-margin" min="0" max="100" value="0" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Borders & Background Group -->
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:14px; border-radius:8px;">
+                      <h5 style="margin:0 0 12px 0; color:var(--accent-cyan); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Borders & Background</h5>
+                      <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div>
+                          <label style="display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;">Background Color</label>
+                          <input type="color" id="designer-bg-color" value="#1e293b" style="width:100%; height:36px; border:none; border-radius:4px; cursor:pointer; background:transparent;">
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Border Radius</span>
+                            <span id="designer-radius-val">8px</span>
+                          </div>
+                          <input type="range" id="designer-radius" min="0" max="50" value="8" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Border Width</span>
+                            <span id="designer-border-width-val">0px</span>
+                          </div>
+                          <input type="range" id="designer-border-width" min="0" max="10" value="0" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                        <div>
+                          <label style="display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;">Border Color</label>
+                          <input type="color" id="designer-border-color" value="#00f2fe" style="width:100%; height:36px; border:none; border-radius:4px; cursor:pointer; background:transparent;">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Box Shadow Group -->
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:14px; border-radius:8px;">
+                      <h5 style="margin:0 0 12px 0; color:var(--accent-cyan); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Shadow Effect</h5>
+                      <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
+                            <span>Shadow Blur</span>
+                            <span id="designer-shadow-val">0px</span>
+                          </div>
+                          <input type="range" id="designer-shadow" min="0" max="60" value="0" style="width:100%; accent-color:var(--accent-cyan);">
+                        </div>
+                        <div>
+                          <label style="display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;">Shadow Color</label>
+                          <input type="color" id="designer-shadow-color" value="#000000" style="width:100%; height:36px; border:none; border-radius:4px; cursor:pointer; background:transparent;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Celebration Modal (For Solved Challenges) -->
+  <div class="celebration-overlay" id="celebration-modal">
+    <div class="celebration-card">
+      <div class="celebration-icon">
+        <i class="fas fa-award"></i>
+      </div>
+      <h2>Quest Complete!</h2>
+      <p>Your solution successfully matched all validation guidelines. You are mastering CSS properties day by day!</p>
+      <div class="celebration-buttons">
+        <button class="btn-verify" id="next-challenge-btn" style="width:auto; padding: 12px 24px;">Next Quest <i class="fas fa-arrow-right"></i></button>
+        <button class="btn-secondary" id="close-overlay-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="classroom-data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="html-data.js"></script>
+  <script src="designs-data.js"></script>
+  <script src="challenges.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

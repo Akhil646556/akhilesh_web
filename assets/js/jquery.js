@@ -12,9 +12,27 @@ $(function() {
         }
     });
 
+    // Restrict mobile input to numbers only
+    $(document).on('input', 'input[name="mobile"]', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
     // Contact Form Submission (Pattern Check)
     $(document).on("submit", "#contactForm", function(event) {
         event.preventDefault();
+        
+        // Client-side mobile validation (exactly 10 digits)
+        const mobile = $(this).find('input[name="mobile"]').val();
+        if (!/^[0-9]{10}$/.test(mobile)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Mobile Number',
+                text: 'Please enter a valid 10-digit mobile number.',
+                confirmButtonColor: '#ef4444'
+            });
+            return;
+        }
+
         const btn = $(this).find('button[type="submit"]');
         const originalBtnText = btn.html();
         

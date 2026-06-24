@@ -39,6 +39,7 @@
                 <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="css_studio/index.html" target="_blank">CSS Studio</a></li>
                 <li class="nav-item"><a class="nav-link" href="#experience">Journey</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 

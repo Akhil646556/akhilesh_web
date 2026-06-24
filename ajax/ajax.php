@@ -20,6 +20,8 @@ if ($action == 'contact_submit') {
         $response['message'] = 'Please fill in all required fields.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $response['message'] = 'Please enter a valid email address.';
+    } elseif (!preg_match('/^[0-9]{10}$/', $mobile)) {
+        $response['message'] = 'Please enter a valid 10-digit mobile number.';
     } else {
         // Build base URL dynamically (works on localhost & InfinityFree automatically)
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";

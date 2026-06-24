@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7">
-                <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 mb-3 fs-6">
+                <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 mb-3 fs-6 hero-badge">
                     Full Stack Developer | Django | React | Flutter | PHP
                 </div>
                 <h1 class="display-3 fw-bold mb-4">Hello, I'm <br><span class="text-primary">Akhilesh</span> Kumar <span class="text-primary">Prajapati</span></h1>
@@ -33,7 +33,9 @@
                             <i class="fab fa-react text-info me-2 animate-spin-slow"></i> React
                         </div>
                         <div class="tech-tag tag-flutter">
-                            <i class="fas fa-mobile-alt text-primary me-2"></i> Flutter
+                            <svg class="me-2" width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="font-size: 1.1em; vertical-align: middle;">
+                                <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z" fill="var(--primary-color)"/>
+                            </svg>Flutter
                         </div>
                         <img src="assets/img/akhilesh.png" alt="Akhilesh" class="img-fluid">
                     </div>
@@ -162,7 +164,15 @@
             </div>
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="glass-card text-center p-4 h-100">
-                    <i class="fas fa-mobile-alt fa-3x mb-3 skill-icon"></i>
+                    <svg class="skill-icon mb-3" width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="font-size: 3em; vertical-align: middle;">
+                        <defs>
+                            <linearGradient id="flutterGradientSkill" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--primary-color)" />
+                                <stop offset="100%" stop-color="var(--secondary-color)" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z" fill="url(#flutterGradientSkill)"/>
+                    </svg>
                     <h6 class="mb-0">Flutter</h6>
                 </div>
             </div>
@@ -211,7 +221,17 @@
             </div>
             <div class="col-md-6 col-lg-4">
                 <div class="glass-card h-100 p-4">
-                    <div class="skill-icon mb-3"><i class="fab fa-flutter fa-2x"></i></div>
+                    <div class="mb-3">
+                        <svg class="skill-icon" width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="font-size: 2em; vertical-align: middle;">
+                            <defs>
+                                <linearGradient id="flutterGradientService" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="var(--primary-color)" />
+                                    <stop offset="100%" stop-color="var(--secondary-color)" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z" fill="url(#flutterGradientService)"/>
+                        </svg>
+                    </div>
                     <h4>Flutter Mobile Apps</h4>
                     <p class="text-muted small">Cross-platform mobile applications utilizing Flutter for gorgeous native execution on iOS and Android with offline-first local database support.</p>
                 </div>
@@ -243,6 +263,26 @@
         </div>
 
         <div class="row g-4">
+            <!-- Project: CSS Studio -->
+            <div class="col-md-6 col-lg-4 project-card" data-category="react-tech">
+                <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="badge bg-primary mb-2">Interactive App</div>
+                        <h4 class="mb-3">CSS Studio</h4>
+                        <p class="text-muted small">An interactive suite designed to learn and practice CSS & HTML. Includes a code sandbox, visual generators, reference explorer, classroom lessons, and styling challenges.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <span class="badge border border-secondary text-muted">HTML5</span>
+                        <span class="badge border border-secondary text-muted">CSS3</span>
+                        <span class="badge border border-secondary text-muted">JavaScript</span>
+                        <span class="badge border border-secondary text-muted">Interactive</span>
+                    </div>
+                    <div class="mt-3">
+                        <a href="css_studio/index.html" target="_blank" class="btn btn-sm btn-outline-primary w-100 rounded-pill"><i class="fas fa-external-link-alt me-1"></i> Open CSS Studio</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Project 1: Shiraz Hotel -->
             <div class="col-md-6 col-lg-4 project-card" data-category="enterprise">
                 <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between">
@@ -717,7 +757,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mobile Number</label>
-                            <input type="tel" name="mobile" class="form-control bg-transparent text-white border-secondary" required>
+                            <input type="tel" name="mobile" class="form-control bg-transparent text-white border-secondary" required maxlength="10" minlength="10" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" placeholder="10-digit mobile number">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Message</label>
