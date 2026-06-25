@@ -6,7 +6,7 @@ const state = {
   sandbox: {
     activeLang: 'html',
     html: localStorage.getItem('css_practice_sandbox_html') || `<div class="card-container">\n  <div class="premium-card">\n    <div class="card-icon">⚡</div>\n    <h3>CSS Sandbox</h3>\n    <p>Experiment with layouts, animations, transitions, and CSS properties live.</p>\n    <button class="card-action">Get Started</button>\n  </div>\n</div>`,
-    css: localStorage.getItem('css_practice_sandbox_css') || `body {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  margin: 0;\n  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);\n  font-family: 'Outfit', sans-serif;\n}\n\n.card-container {\n  perspective: 1000px;\n}\n\n.premium-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.08);\n  border-radius: 20px;\n  padding: 40px 30px;\n  width: 320px;\n  text-align: center;\n  color: white;\n  backdrop-filter: blur(12px);\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\n  transition: all 0.4s ease;\n}\n\n.premium-card:hover {\n  transform: translateY(-10px) rotateX(4deg);\n  border-color: rgba(0, 242, 254, 0.3);\n  box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);\n}\n\n.card-icon {\n  font-size: 40px;\n  margin-bottom: 20px;\n  display: inline-block;\n  animation: float 3s ease-in-out infinite;\n}\n\n.premium-card h3 {\n  margin: 0 0 10px;\n  font-size: 24px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n}\n\n.premium-card p {\n  margin: 0 0 30px;\n  font-size: 14px;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n\n.card-action {\n  background: linear-gradient(135deg, #00f2fe, #4facfe);\n  border: none;\n  color: #0f172a;\n  font-weight: 700;\n  padding: 12px 28px;\n  border-radius: 30px;\n  cursor: pointer;\n  transition: all 0.3s;\n  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);\n}\n\n.card-action:hover {\n  transform: scale(1.05);\n  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);\n}\n\n@keyframes float {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-8px); }\n}`
+    css: localStorage.getItem('css_practice_sandbox_css') || `body {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  margin: 0;\n  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);\n  font-family: 'Outfit', sans-serif;\n}\n\n.card-container {\n  perspective: 1000px;\n  width: 100%;\n  display: flex;\n  justify-content: center;\n}\n\n.premium-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.08);\n  border-radius: 20px;\n  padding: 40px 30px;\n  width: 100%;\n  max-width: 320px;\n  box-sizing: border-box;\n  text-align: center;\n  color: white;\n  backdrop-filter: blur(12px);\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\n  transition: all 0.4s ease;\n}\n\n.premium-card:hover {\n  transform: translateY(-10px) rotateX(4deg);\n  border-color: rgba(0, 242, 254, 0.3);\n  box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);\n}\n\n.card-icon {\n  font-size: 40px;\n  margin-bottom: 20px;\n  display: inline-block;\n  animation: float 3s ease-in-out infinite;\n}\n\n.premium-card h3 {\n  margin: 0 0 10px;\n  font-size: 24px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n}\n\n.premium-card p {\n  margin: 0 0 30px;\n  font-size: 14px;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n\n.card-action {\n  background: linear-gradient(135deg, #00f2fe, #4facfe);\n  border: none;\n  color: #0f172a;\n  font-weight: 700;\n  padding: 12px 28px;\n  border-radius: 30px;\n  cursor: pointer;\n  transition: all 0.3s;\n  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);\n}\n\n.card-action:hover {\n  transform: scale(1.05);\n  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);\n}\n\n@keyframes float {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-8px); }\n}`
   },
   generators: {
     active: 'flexbox',
@@ -155,9 +155,14 @@ function initNavigation() {
     tab.addEventListener('click', () => {
       const targetPanel = tab.getAttribute('data-tab');
       
-      // Update UI tabs
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+      // Update UI tabs (synchronize desktop top nav and mobile bottom nav)
+      tabs.forEach(t => {
+        if (t.getAttribute('data-tab') === targetPanel) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
       
       // Toggle panels
       document.querySelectorAll('.tab-panel').forEach(panel => {
