@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ak Framework - Custom Admin Panel Builder</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../../assets/img/new_akhilesh_logo_final.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Our Custom Compiled Framework -->
+  <link rel="stylesheet" href="../dist/ak-bootstrap.min.css?v=2.0">
+  
+  <style>
+    :root {
+      --builder-bg: #0f172a;
+      --builder-sidebar-width: 420px;
+      /* Override ak framework theme colors to match portfolio */
+      --ak-primary: #00D4FF;
+      --ak-primary-hover: #0099FF;
+      --ak-primary-light: rgba(0, 212, 255, 0.1);
+    }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Top Header Bar */
+    .builder-header {
+      height: 70px;
+      background-color: #131c31;
+      border-bottom: 1px solid #1e293b;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    
+    /* Sidebar controls */
+    .builder-container {
+      display: flex;
+      flex-grow: 1;
+      height: calc(100vh - 70px);
+      overflow: hidden;
+    }
+    
+    .builder-sidebar {
+      width: var(--builder-sidebar-width);
+      background-color: #131c31;
+      border-right: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid #1e293b;
+      background-color: #0f172a;
+    }
+    
+    .sidebar-tab {
+      flex: 1;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    
+    .sidebar-tab:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+    
+    .sidebar-tab.active {
+      color: #00D4FF;
+      border-bottom-color: #00D4FF;
+      background-color: rgba(0, 212, 255, 0.05);
+    }
+    
+    .sidebar-content {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    
+    .sidebar-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .sidebar-content::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    
+    /* Panel collapse accordion styling */
+    .control-group {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    
+    .control-header {
+      padding: 14px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      background-color: #131c31;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+    
+    .control-header:hover {
+      background-color: #18233c;
+    }
+    
+    .control-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-top: 1px solid #1e293b;
+    }
+    
+    /* Canvas Viewport */
+    .builder-viewport {
+      flex-grow: 1;
+      background-color: #0b0f19;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+    
+    .viewport-toolbar {
+      height: 50px;
+      background-color: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .device-switchers {
+      display: flex;
+      gap: 4px;
+      background-color: #131c31;
+      border-radius: 6px;
+      padding: 4px;
+      border: 1px solid #1e293b;
+    }
+    
+    .device-btn {
+      background: transparent;
+      border: 0;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .device-btn:hover {
+      color: #ffffff;
+    }
+    
+    .device-btn.active {
+      background-color: #00D4FF;
+      color: #0b0f19;
+    }
+    
+    .viewport-canvas {
+      flex-grow: 1;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #131c31 0%, #0b0f19 100%);
+      overflow: auto;
+    }
+    
+    /* Device frames for responsive preview */
+    .preview-frame {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 6px solid #1e293b;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    
+    .preview-frame.desktop {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: 0;
+    }
+    
+    .preview-frame.tablet {
+      width: 768px;
+      height: 1024px;
+      max-height: 90%;
+    }
+    
+    .preview-frame.mobile {
+      width: 375px;
+      height: 750px;
+      max-height: 90%;
+      border-radius: 32px;
+      border-width: 12px;
+    }
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #f8fafc;
+    }
+    
+    /* Card/List reordering widget */
+    .widget-item-card {
+      background-color: #131c31;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    
+    .widget-item-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #f8fafc;
+    }
+    
+    .widget-actions {
+      display: flex;
+      gap: 6px;
+    }
+    
+    .widget-btn {
+      background: transparent;
+      border: 0;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    .widget-btn:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .widget-btn.delete:hover {
+      color: #ef4444;
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+    
+    /* JSON schema preview modal overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 15, 25, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    .modal-box {
+      background-color: #131c31;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-body {
+      padding: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #1e293b;
+      background-color: #0f172a;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    
+    .json-textarea {
+      width: 100%;
+      height: 300px;
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      padding: 16px;
+      resize: none;
+      outline: none;
+    }
+    
+    .json-textarea:focus {
+      border-color: #00D4FF;
+    }
+    
+    /* Control Fields */
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .builder-input, .builder-select {
+      background-color: #0f172a;
+      border: 1.5px solid #1e293b;
+      border-radius: 6px;
+      color: #ffffff;
+      font-family: inherit;
+      padding: 10px 14px;
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .builder-input:focus, .builder-select:focus {
+      border-color: #00D4FF;
+    }
+    
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    
+    .toggle-switch-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #f8fafc;
+    }
+    
+    /* Add element card */
+    .add-widget-btn {
+      border: 1px dashed #1e293b;
+      background-color: rgba(255, 255, 255, 0.01);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      user-select: none;
+    }
+    
+    .add-widget-btn:hover {
+      border-color: #00D4FF;
+      color: #00D4FF;
+      background-color: rgba(0, 212, 255, 0.03);
+    }
+    
+    /* Logo Styling and Animations */
+    .brand-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+    
+    .brand-logo-icon-wrapper {
+      width: 40px;
+      height: 40px;
+      background-color: #1e293b;
+      border-radius: 10px;
+      padding: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 1px solid #2e3c56;
+    }
+    
+    .brand-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+    }
+    
+    .brand-logo-link:hover .brand-logo-icon-wrapper {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+      border-color: #00D4FF;
+      background-color: #18233c;
+    }
+    
+    .brand-logo-link:hover .brand-logo-img {
+      transform: rotate(360deg);
+    }
+    
+    .brand-logo-link:hover .brand-logo-text {
+      color: #00D4FF !important;
+    }
+    
+    .brand-logo-text {
+      transition: color 0.2s ease;
+    }
+    
+    /* Mobile Fixed Footer Navigation */
+    .mobile-footer-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: #131c31;
+      border-top: 1px solid #1e293b;
+      z-index: 999;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+    }
+    
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      gap: 4px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+      transition: color 0.2s;
+    }
+    
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      color: #00D4FF;
+    }
+    
+    @media (max-width: 991px) {
+      .builder-header {
+        height: 60px;
+        padding: 0 16px;
+      }
+      .builder-header .ak-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+      .brand-logo-text {
+        font-size: 15px !important;
+      }
+      .builder-container {
+        height: calc(100vh - 120px) !important; /* header 60px + footer 60px */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-footer-nav {
+        display: flex;
+      }
+      body {
+        height: 100vh;
+        overflow: hidden;
+        padding-bottom: 60px;
+      }
+      /* Toggle views */
+      .builder-sidebar.mobile-hidden {
+        display: none !important;
+      }
+      .builder-viewport.mobile-hidden {
+        display: none !important;
+      }
+      .builder-sidebar {
+        width: 100% !important;
+        border-right: 0;
+      }
+      .builder-viewport {
+        width: 100% !important;
+      }
+    }
+
+    /* Desktop-Only Overlay Style */
+    .desktop-only-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #0b0f19;
+      z-index: 100000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .desktop-only-content {
+      max-width: 440px;
+      background: rgba(30, 41, 59, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .desktop-icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      animation: desktopPulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes desktopPulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.2);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px 5px rgba(0, 212, 255, 0.4);
+      }
+    }
+
+    .desktop-only-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .desktop-only-desc {
+      font-size: 14px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .desktop-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #00D4FF;
+      color: #0b0f19;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .desktop-back-btn:hover {
+      background-color: #0099FF;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 1023px) {
+      .desktop-only-overlay {
+        display: flex;
+      }
+      body {
+        overflow: hidden !important;
+        height: 100vh !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Desktop-Only Block Screen Overlay -->
+  <div class="desktop-only-overlay">
+    <div class="desktop-only-content">
+      <div class="desktop-icon-wrapper">
+        <ak-icon name="lucide/monitor" size="40px" color="#00D4FF"></ak-icon>
+      </div>
+      <h1 class="desktop-only-title">Desktop Required</h1>
+      <p class="desktop-only-desc">
+        The Visual Admin Panel Builder is designed specifically for desktop screens to support drag-and-drop elements and full viewport editing. Please open this page on a desktop device.
+      </p>
+      <a href="../../index.php" class="desktop-back-btn">
+        <ak-icon name="lucide/arrow-left" size="14px"></ak-icon> Back to Portfolio
+      </a>
+    </div>
+  </div>
+
+  <!-- Top Header Bar -->
+  <header class="builder-header">
+    <a href="../../index.php" class="brand-logo-link">
+      <div class="brand-logo-icon-wrapper">
+        <img src="../../assets/img/new_akhilesh_logo_final.png" alt="Logo" class="brand-logo-img">
+      </div>
+      <div>
+        <span class="ak-fs-18 ak-fw-bold ak-text-white brand-logo-text">ak<span class="ak-text-primary">.PanelBuilder</span></span>
+        <span class="ak-badge ak-bg-primary-light ak-text-primary ak-ml-8" style="font-size: 10px; padding: 2px 6px;">visual editor</span>
+      </div>
+    </a>
+    
+    <div class="ak-d-flex ak-align-items-center ak-gap-12">
+      <button class="ak-btn ak-btn-outline-light ak-btn-sm" onclick="openJsonModal()">
+        <ak-icon name="lucide/code" size="14px"></ak-icon> Import / Export JSON
+      </button>
+      <button class="ak-btn ak-btn-gradient-primary ak-btn-sm" onclick="downloadDesign()">
+        <ak-icon name="lucide/download" size="14px"></ak-icon> Download HTML Design
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Split Editor Workspace -->
+  <div class="builder-container">
+    
+    <!-- Left Sidebar: Builder Controls & Forms -->
+    <aside class="builder-sidebar">
+      
+      <!-- Tab Headers -->
+      <div class="sidebar-tabs">
+        <div class="sidebar-tab active" onclick="switchTab('layout', this)">
+          <ak-icon name="lucide/layout" size="14px" class="ak-mb-4 ak-d-block ak-mx-auto"></ak-icon>
+          Layout Setup
+        </div>
+        <div class="sidebar-tab" onclick="switchTab('widgets', this)">
+          <ak-icon name="lucide/grid" size="14px" class="ak-mb-4 ak-d-block ak-mx-auto"></ak-icon>
+          Page Widgets
+        </div>
+        <div class="sidebar-tab" onclick="switchTab('menu', this)">
+          <ak-icon name="lucide/menu" size="14px" class="ak-mb-4 ak-d-block ak-mx-auto"></ak-icon>
+          Sidebar Navigation
+        </div>
+      </div>
+      
+      <!-- Scrollable Tab Content Container -->
+      <div class="sidebar-content">
+        
+        <!-- Tab 1: Layout & Customization Settings -->
+        <div id="tab-layout" class="tab-pane">
+          <!-- Accordion 1: Branding -->
+          <div class="control-group">
+            <div class="control-header" onclick="toggleAccordion(this)">
+              <span>Branding & Fonts</span>
+              <ak-icon name="lucide/chevron-down" size="14px"></ak-icon>
+            </div>
+            <div class="control-body">
+              <div>
+                <label class="field-label">Typography Google Font</label>
+                <select class="builder-select" id="brandFont" onchange="updateBuilderConfig()">
+                  <option value="Outfit">Outfit</option>
+                  <option value="Inter">Inter</option>
+                  <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                  <option value="Cabinet Grotesque">Cabinet Grotesque</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Brand Logo Text</label>
+                <input type="text" class="builder-input" id="brandLogoText" value="DashBuilder" oninput="updateBuilderConfig()">
+              </div>
+              <div>
+                <label class="field-label">Brand Short Badge</label>
+                <input type="text" class="builder-input" id="brandBadgeText" value="AK" oninput="updateBuilderConfig()">
+              </div>
+              <div>
+                <label class="field-label">Logo Position</label>
+                <select class="builder-select" id="brandPosition" onchange="updateBuilderConfig()">
+                  <option value="sidebar">Top of Sidebar</option>
+                  <option value="topbar">Left of Topbar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Accordion 2: Topbar Config -->
+          <div class="control-group">
+            <div class="control-header" onclick="toggleAccordion(this)">
+              <span>Topbar Customization</span>
+              <ak-icon name="lucide/chevron-down" size="14px"></ak-icon>
+            </div>
+            <div class="control-body">
+              <div class="toggle-switch">
+                <span class="toggle-switch-label">Sticky Header Position</span>
+                <label class="ak-form-check ak-form-switch ak-m-0">
+                  <input type="checkbox" class="ak-form-check-input" id="topbarSticky" checked onchange="updateBuilderConfig()">
+                </label>
+              </div>
+              <div class="toggle-switch">
+                <span class="toggle-switch-label">Global Search Bar</span>
+                <label class="ak-form-check ak-form-switch ak-m-0">
+                  <input type="checkbox" class="ak-form-check-input" id="topbarSearch" checked onchange="updateBuilderConfig()">
+                </label>
+              </div>
+              <div class="toggle-switch">
+                <span class="toggle-switch-label">Notification Badge dropdown</span>
+                <label class="ak-form-check ak-form-switch ak-m-0">
+                  <input type="checkbox" class="ak-form-check-input" id="topbarNotifications" checked onchange="updateBuilderConfig()">
+                </label>
+              </div>
+              <div class="toggle-switch">
+                <span class="toggle-switch-label">User Profile Widget</span>
+                <label class="ak-form-check ak-form-switch ak-m-0">
+                  <input type="checkbox" class="ak-form-check-input" id="topbarProfile" checked onchange="updateBuilderConfig()">
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Accordion 3: Footer Config -->
+          <div class="control-group">
+            <div class="control-header" onclick="toggleAccordion(this)">
+              <span>Footer Customization</span>
+              <ak-icon name="lucide/chevron-down" size="14px"></ak-icon>
+            </div>
+            <div class="control-body">
+              <div>
+                <label class="field-label">Copyright Brand Text</label>
+                <input type="text" class="builder-input" id="footerText" value="© 2026 DashBuilder. All rights reserved." oninput="updateBuilderConfig()">
+              </div>
+              <div class="toggle-switch">
+                <span class="toggle-switch-label">Fixed Sticky to Bottom</span>
+                <label class="ak-form-check ak-form-switch ak-m-0">
+                  <input type="checkbox" class="ak-form-check-input" id="footerSticky" onchange="updateBuilderConfig()">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Canvas Drag-and-Drop / Reordering widgets -->
+        <div id="tab-widgets" class="tab-pane ak-d-none">
+          <div class="ak-mb-16">
+            <h6 class="ak-fs-12 ak-fw-bold ak-text-uppercase ak-mb-8" style="color: #94a3b8;">Add Design Element</h6>
+            <div class="ak-d-flex ak-flex-column ak-gap-8">
+              <div class="add-widget-btn" onclick="addNewWidget('toolbar')">
+                <ak-icon name="lucide/heading" size="14px"></ak-icon> Page Header Toolbar
+              </div>
+              <div class="add-widget-btn" onclick="addNewWidget('metrics')">
+                <ak-icon name="lucide/grid" size="14px"></ak-icon> Metric Cards (3 Columns)
+              </div>
+              <div class="add-widget-btn" onclick="addNewWidget('table')">
+                <ak-icon name="lucide/table" size="14px"></ak-icon> Data Grid Table
+              </div>
+              <div class="add-widget-btn" onclick="addNewWidget('form')">
+                <ak-icon name="lucide/file-text" size="14px"></ak-icon> Form Profile Card
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h6 class="ak-fs-12 ak-fw-bold ak-text-uppercase ak-mb-12" style="color: #94a3b8;">Elements Canvas Stack</h6>
+            <div class="ak-d-flex ak-flex-column ak-gap-8" id="widgetsStackContainer">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Sidebar Navigation Links Settings -->
+        <div id="tab-menu" class="tab-pane ak-d-none">
+          <div class="toggle-switch ak-mb-16" style="border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+            <span class="toggle-switch-label" style="font-weight: 600;">Sidebar Collapsible</span>
+            <label class="ak-form-check ak-form-switch ak-m-0">
+              <input type="checkbox" class="ak-form-check-input" id="sidebarCollapsible" checked onchange="updateBuilderConfig()">
+            </label>
+          </div>
+          <div class="toggle-switch ak-mb-16" style="border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+            <span class="toggle-switch-label" style="font-weight: 600;">Show Mobile Close Button</span>
+            <label class="ak-form-check ak-form-switch ak-m-0">
+              <input type="checkbox" class="ak-form-check-input" id="sidebarMobileClose" checked onchange="updateBuilderConfig()">
+            </label>
+          </div>
+          
+          <div class="ak-mb-16">
+            <h6 class="ak-fs-12 ak-fw-bold ak-text-uppercase ak-mb-12" style="color: #94a3b8;">Navigation Items</h6>
+            <div class="ak-d-flex ak-flex-column ak-gap-12" id="sidebarItemsEditorContainer">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+          
+          <div class="add-widget-btn" onclick="addNewSidebarItem()">
+            <ak-icon name="lucide/plus" size="14px"></ak-icon> Add Navigation Link
+          </div>
+        </div>
+        
+      </div>
+    </aside>
+
+    <!-- Right Workspace Area: Interactive Canvas & Responsive frame -->
+    <main class="builder-viewport mobile-hidden">
+      
+      <!-- Toolbar: View controls & Resizing -->
+      <div class="viewport-toolbar">
+        <div class="ak-d-flex ak-align-items-center ak-gap-8">
+          <span class="ak-fs-13 ak-fw-semibold ak-text-secondary">Preview Resolution:</span>
+          <div class="device-switchers">
+            <button class="device-btn active" onclick="switchDevice('desktop', this)">
+              <ak-icon name="lucide/monitor" size="13px"></ak-icon> Desktop
+            </button>
+            <button class="device-btn" onclick="switchDevice('tablet', this)">
+              <ak-icon name="lucide/tablet" size="13px"></ak-icon> Tablet
+            </button>
+            <button class="device-btn" onclick="switchDevice('mobile', this)">
+              <ak-icon name="lucide/smartphone" size="13px"></ak-icon> Mobile
+            </button>
+          </div>
+        </div>
+        
+        <div class="ak-fs-12 ak-text-secondary ak-fw-medium">
+          Sandbox Live Preview • Automatic JIT Update
+        </div>
+      </div>
+      
+      <!-- Canvas Wrapper containing Sandboxed Iframe Preview -->
+      <div class="viewport-canvas">
+        <div class="preview-frame desktop" id="previewFrame">
+          <iframe id="previewCanvas" title="Dashboard Preview Grid"></iframe>
+        </div>
+      </div>
+    </main>
+    
+  </div>
+
+  <!-- Import / Export JSON Schema Modal -->
+  <div class="modal-overlay" id="jsonModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h5 class="ak-h5 ak-m-0">JSON Configuration Manager</h5>
+        <button class="widget-btn" onclick="closeJsonModal()">
+          <ak-icon name="lucide/x" size="18px"></ak-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="ak-text-secondary ak-fs-13">Copy the configuration object below to save your design offline, or paste an existing design JSON configuration to load it into the visual builder.</p>
+        <textarea class="json-textarea" id="jsonInputText"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="ak-btn ak-btn-secondary ak-btn-sm" onclick="closeJsonModal()">Cancel</button>
+        <button class="ak-btn ak-btn-primary ak-btn-sm" onclick="importJsonConfig()">Import JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include library script -->
+  <script src="../dist/ak-bootstrap.min.js?v=2.0"></script>
+  
+  <script>
+    // Initial Builder Design Configuration State
+    let config = {
+      branding: {
+        font: 'Outfit',
+        logoText: 'DashBuilder',
+        logoPosition: 'sidebar',
+        logoBadgeText: 'AK'
+      },
+      sidebar: {
+        collapsible: true,
+        showMobileClose: true,
+        items: [
+          { text: 'Dashboard Overview', icon: 'layout-dashboard', tooltip: 'Dashboard Overview' },
+          { text: 'User Profiles', icon: 'users', tooltip: 'Manage User Accounts' },
+          { text: 'System Reports', icon: 'activity', tooltip: 'Performance Analytics' },
+          { text: 'Configuration', icon: 'settings', tooltip: 'System Settings' }
+        ]
+      },
+      topbar: {
+        sticky: true,
+        showSearch: true,
+        showNotifications: true,
+        showProfile: true
+      },
+      footer: {
+        sticky: false,
+        copyrightText: '© 2026 DashBuilder. All rights reserved.'
+      },
+      canvas: [
+        {
+          id: 'widget-header-0',
+          type: 'toolbar',
+          title: 'Dashboard Overview',
+          subtitle: 'Welcome back, Admin! Here is your business health snapshot.'
+        },
+        {
+          id: 'widget-metrics-1',
+          type: 'metrics',
+          cards: [
+            { title: 'Total Revenue', value: '$84,254', trend: '+12.5%', trendType: 'up', style: 'primary' },
+            { title: 'Active Accounts', value: '12,480', trend: '+8.3%', trendType: 'up', style: 'success' },
+            { title: 'Pending Support', value: '18 Tasks', trend: '-2.4%', trendType: 'down', style: 'warning' }
+          ]
+        },
+        {
+          id: 'widget-table-2',
+          type: 'table',
+          title: 'Recent Activity Logs'
+        }
+      ]
+    };
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup Accordion Toggles
+      document.querySelectorAll('.control-header').forEach(header => {
+        // Start closed except first
+        const isFirst = header.parentElement === document.querySelector('.control-group');
+        if (!isFirst) {
+          header.nextElementSibling.style.display = 'none';
+          const icon = header.querySelector('ak-icon');
+          if (icon) icon.setAttribute('name', 'lucide/chevron-right');
+        }
+      });
+      
+      // Load UI Controls from state
+      loadControlsFromConfig();
+      // Render Preview
+      updatePreview();
+    });
+
+    function toggleAccordion(header) {
+      const body = header.nextElementSibling;
+      const icon = header.querySelector('ak-icon');
+      if (body.style.display === 'none') {
+        body.style.display = 'flex';
+        icon.setAttribute('name', 'lucide/chevron-down');
+      } else {
+        body.style.display = 'none';
+        icon.setAttribute('name', 'lucide/chevron-right');
+      }
+    }
+
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove('active'));
+      
+      let tabEl = element;
+      if (!tabEl) {
+        document.querySelectorAll('.sidebar-tab').forEach(tab => {
+          if (tab.getAttribute('onclick') && tab.getAttribute('onclick').includes(`'${tabId}'`)) {
+            tabEl = tab;
+          }
+        });
+      }
+      
+      if (tabEl) {
+        tabEl.classList.add('active');
+      }
+      
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('ak-d-none'));
+      document.getElementById('tab-' + tabId).classList.remove('ak-d-none');
+      
+      if (tabId === 'widgets') {
+        renderWidgetsStack();
+      } else if (tabId === 'menu') {
+        renderSidebarMenuEditor();
+      }
+    }
+
+    function switchMobileView(view, btn) {
+      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const sidebar = document.querySelector('.builder-sidebar');
+      const viewport = document.querySelector('.builder-viewport');
+      
+      if (view === 'preview') {
+        sidebar.classList.add('mobile-hidden');
+        viewport.classList.remove('mobile-hidden');
+      } else {
+        viewport.classList.add('mobile-hidden');
+        sidebar.classList.remove('mobile-hidden');
+        
+        switchTab(view);
+      }
+    }
+
+    function switchDevice(device, btn) {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const frame = document.getElementById('previewFrame');
+      frame.className = 'preview-frame ' + device;
+    }
+
+    // Modal Operations
+    function openJsonModal() {
+      document.getElementById('jsonInputText').value = JSON.stringify(config, null, 2);
+      document.getElementById('jsonModal').style.display = 'flex';
+    }
+
+    function closeJsonModal() {
+      document.getElementById('jsonModal').style.display = 'none';
+    }
+
+    function importJsonConfig() {
+      try {
+        const parsed = JSON.parse(document.getElementById('jsonInputText').value);
+        if (parsed && typeof parsed === 'object') {
+          config = parsed;
+          loadControlsFromConfig();
+          updatePreview();
+          closeJsonModal();
+          ak.toast.success('Configuration loaded successfully.');
+        } else {
+          ak.toast.danger('Invalid JSON schema format.');
+        }
+      } catch (e) {
+        ak.toast.danger('Parsing Error: ' + e.message);
+      }
+    }
+
+    // Populate configuration state into UI Control elements
+    function loadControlsFromConfig() {
+      document.getElementById('brandFont').value = config.branding.font || 'Outfit';
+      document.getElementById('brandLogoText').value = config.branding.logoText || '';
+      document.getElementById('brandBadgeText').value = config.branding.logoBadgeText || 'AK';
+      document.getElementById('brandPosition').value = config.branding.logoPosition || 'sidebar';
+      
+      document.getElementById('topbarSticky').checked = config.topbar.sticky;
+      document.getElementById('topbarSearch').checked = config.topbar.showSearch;
+      document.getElementById('topbarNotifications').checked = config.topbar.showNotifications;
+      document.getElementById('topbarProfile').checked = config.topbar.showProfile;
+      
+      document.getElementById('footerText').value = config.footer.copyrightText || '';
+      document.getElementById('footerSticky').checked = config.footer.sticky || false;
+      document.getElementById('sidebarCollapsible').checked = config.sidebar.collapsible;
+      document.getElementById('sidebarMobileClose').checked = config.sidebar.showMobileClose !== false;
+    }
+
+    // Update configuration state from UI Control elements
+    function updateBuilderConfig() {
+      config.branding.font = document.getElementById('brandFont').value;
+      config.branding.logoText = document.getElementById('brandLogoText').value;
+      config.branding.logoBadgeText = document.getElementById('brandBadgeText').value;
+      config.branding.logoPosition = document.getElementById('brandPosition').value;
+      
+      config.topbar.sticky = document.getElementById('topbarSticky').checked;
+      config.topbar.showSearch = document.getElementById('topbarSearch').checked;
+      config.topbar.showNotifications = document.getElementById('topbarNotifications').checked;
+      config.topbar.showProfile = document.getElementById('topbarProfile').checked;
+      
+      config.footer.copyrightText = document.getElementById('footerText').value;
+      config.footer.sticky = document.getElementById('footerSticky').checked;
+      config.sidebar.collapsible = document.getElementById('sidebarCollapsible').checked;
+      config.sidebar.showMobileClose = document.getElementById('sidebarMobileClose').checked;
+      
+      updatePreview();
+    }
+
+    // Widgets UI editor list generator
+    function renderWidgetsStack() {
+      const container = document.getElementById('widgetsStackContainer');
+      container.innerHTML = '';
+      
+      if (config.canvas.length === 0) {
+        container.innerHTML = `<div class="ak-text-center ak-text-secondary ak-fs-12 ak-py-20">No items on page. Click items above to add.</div>`;
+        return;
+      }
+      
+      config.canvas.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'widget-item-card';
+        
+        let typeLabel = '';
+        switch(item.type) {
+          case 'toolbar': typeLabel = 'Header Toolbar'; break;
+          case 'metrics': typeLabel = 'Metric Grids'; break;
+          case 'table': typeLabel = 'Data Table'; break;
+          case 'form': typeLabel = 'Profile Settings Form'; break;
+        }
+        
+        card.innerHTML = `
+          <span class="widget-item-title">${index + 1}. ${typeLabel}</span>
+          <div class="widget-actions">
+            <button class="widget-btn" onclick="moveWidget(${index}, -1)" ${index === 0 ? 'disabled' : ''}>
+              <ak-icon name="lucide/arrow-up" size="12px"></ak-icon>
+            </button>
+            <button class="widget-btn" onclick="moveWidget(${index}, 1)" ${index === config.canvas.length - 1 ? 'disabled' : ''}>
+              <ak-icon name="lucide/arrow-down" size="12px"></ak-icon>
+            </button>
+            <button class="widget-btn delete" onclick="deleteWidget(${index})">
+              <ak-icon name="lucide/trash-2" size="12px"></ak-icon>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function moveWidget(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= config.canvas.length) return;
+      
+      const temp = config.canvas[index];
+      config.canvas[index] = config.canvas[newIndex];
+      config.canvas[newIndex] = temp;
+      
+      renderWidgetsStack();
+      updatePreview();
+    }
+
+    function deleteWidget(index) {
+      config.canvas.splice(index, 1);
+      renderWidgetsStack();
+      updatePreview();
+      ak.toast.success('Widget removed from preview canvas.');
+    }
+
+    function addNewWidget(type) {
+      const id = 'widget-' + Date.now();
+      let item = { id, type };
+      
+      if (type === 'toolbar') {
+        item.title = 'Dashboard Overview';
+        item.subtitle = 'Welcome back, Admin! Here is your business health snapshot.';
+      } else if (type === 'metrics') {
+        item.cards = [
+          { title: 'Average Order Value', value: '$124.50', trend: '+4.2%', trendType: 'up', style: 'primary' },
+          { title: 'Total Signups', value: '4,840 Users', trend: '+28%', trendType: 'up', style: 'success' },
+          { title: 'System Load', value: '1.2%', trend: '-0.4%', trendType: 'down', style: 'info' }
+        ];
+      } else if (type === 'table') {
+        item.title = 'Customer Orders';
+      }
+      
+      config.canvas.push(item);
+      renderWidgetsStack();
+      updatePreview();
+      ak.toast.success('Added ' + type + ' widget to canvas.');
+    }
+
+    // Sidebar navigation items list editor generator
+    function renderSidebarMenuEditor() {
+      const container = document.getElementById('sidebarItemsEditorContainer');
+      container.innerHTML = '';
+      
+      config.sidebar.items.forEach((item, index) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'ak-card ak-p-12 ak-mb-12';
+        wrap.style.backgroundColor = '#0f172a';
+        wrap.style.borderColor = '#1e293b';
+        
+        wrap.innerHTML = `
+          <div class="ak-d-flex ak-justify-content-between ak-align-items-center ak-mb-10">
+            <span class="ak-fs-12 ak-fw-bold ak-text-primary">Menu Item #${index + 1}</span>
+            <button class="widget-btn delete" onclick="deleteSidebarItem(${index})">
+              <ak-icon name="lucide/trash" size="12px"></ak-icon>
+            </button>
+          </div>
+          <div class="ak-d-flex ak-flex-column ak-gap-8">
+            <div>
+              <label class="field-label" style="font-size:10px;">Label Name</label>
+              <input type="text" class="builder-input" value="${item.text}" oninput="updateSidebarItemText(${index}, this.value)" style="padding: 6px 10px; font-size:12px;">
+            </div>
+            <div class="ak-row">
+              <div class="ak-col-6">
+                <label class="field-label" style="font-size:10px;">Icon Name</label>
+                <input type="text" class="builder-input" value="${item.icon}" oninput="updateSidebarItemIcon(${index}, this.value)" style="padding: 6px 10px; font-size:12px;">
+              </div>
+              <div class="ak-col-6">
+                <label class="field-label" style="font-size:10px;">Tooltip hover</label>
+                <input type="text" class="builder-input" value="${item.tooltip || ''}" oninput="updateSidebarItemTooltip(${index}, this.value)" style="padding: 6px 10px; font-size:12px;">
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(wrap);
+      });
+    }
+
+    function updateSidebarItemText(index, value) {
+      config.sidebar.items[index].text = value;
+      updatePreview();
+    }
+
+    function updateSidebarItemIcon(index, value) {
+      config.sidebar.items[index].icon = value;
+      updatePreview();
+    }
+
+    function updateSidebarItemTooltip(index, value) {
+      config.sidebar.items[index].tooltip = value;
+      updatePreview();
+    }
+
+    function deleteSidebarItem(index) {
+      config.sidebar.items.splice(index, 1);
+      renderSidebarMenuEditor();
+      updatePreview();
+      ak.toast.success('Navigation link removed.');
+    }
+
+    function addNewSidebarItem() {
+      config.sidebar.items.push({
+        text: 'New Link',
+        icon: 'link',
+        tooltip: 'Menu item info'
+      });
+      renderSidebarMenuEditor();
+      updatePreview();
+      ak.toast.success('Added new sidebar menu item.');
+    }
+
+    // Final HTML Compilation Core Engine
+    function compileAdminPanelHTML(cfg) {
+      // Resolve absolute host paths so downloaded files point back to this website's assets
+      const baseHostPath = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/demo/'));
+      const cssLink = baseHostPath + '/dist/ak-bootstrap.min.css';
+      const jsLink = baseHostPath + '/dist/ak-bootstrap.min.js';
+      // Compile sidebar items
+      let sidebarItemsHTML = '';
+      cfg.sidebar.items.forEach(item => {
+        sidebarItemsHTML += `
+        <a class="ak-sidebar-menu-item">
+          <ak-icon set="lucide" name="${item.icon}" size="18px" color="#94a3b8"></ak-icon>
+          <span class="menu-text">${item.text}</span>
+          ${item.tooltip ? `<div class="floating-menu">${item.tooltip}</div>` : ''}
+        </a>`;
+      });
+
+      // Compile canvas body widgets
+      let canvasHTML = '';
+      cfg.canvas.forEach(widget => {
+        if (widget.type === 'toolbar') {
+          canvasHTML += `
+        <!-- Page Header Toolbar -->
+        <div class="ak-mb-24 ak-d-flex ak-justify-content-between ak-align-items-center ak-flex-wrap ak-gap-16">
+          <div>
+            <h1 class="ak-h2 ak-text-dark ak-mb-4">${widget.title || 'Page Title'}</h1>
+            ${widget.subtitle ? `<p class="ak-text-secondary ak-fs-14">${widget.subtitle}</p>` : ''}
+          </div>
+          <div class="ak-d-flex ak-gap-10">
+            <button class="ak-btn ak-btn-sm ak-btn-outline-primary"><ak-icon set="lucide" name="download" size="14px"></ak-icon> Export</button>
+            <button class="ak-btn ak-btn-sm ak-btn-gradient-primary"><ak-icon set="lucide" name="plus" size="14px"></ak-icon> New Entity</button>
+          </div>
+        </div>
+          `;
+        } else if (widget.type === 'metrics') {
+          let colsHTML = '';
+          const colSize = Math.floor(12 / widget.cards.length);
+          widget.cards.forEach(card => {
+            colsHTML += `
+          <div class="ak-col-12 ak-col-md-${colSize} ak-mb-20">
+            <div class="ak-card">
+              <div class="ak-card-body ak-d-flex ak-align-items-center ak-justify-content-between">
+                <div>
+                  <span class="ak-fs-13 ak-fw-semibold ak-text-secondary ak-d-block ak-mb-6">${card.title}</span>
+                  <span class="ak-h3 ak-text-dark ak-fw-extrabold ak-d-block ak-mb-4">${card.value}</span>
+                  <span class="ak-badge ak-badge-soft-${card.trendType === 'up' ? 'success' : 'danger'} ak-rounded-4 ak-px-6 ak-py-2 ak-fs-11">
+                    <ak-icon set="lucide" name="${card.trendType === 'up' ? 'trending-up' : 'trending-down'}" size="10px" class="ak-mr-4"></ak-icon>${card.trend}
+                  </span>
+                </div>
+                <div class="ak-bg-${card.style}-light ak-rounded-12 ak-p-12" style="color: var(--ak-${card.style});">
+                  <ak-icon set="lucide" name="${card.style === 'primary' ? 'dollar-sign' : card.style === 'success' ? 'users' : 'alert-circle'}" size="24px"></ak-icon>
+                </div>
+              </div>
+            </div>
+          </div>`;
+          });
+          
+          canvasHTML += `
+        <!-- Metric Cards Grid -->
+        <div class="ak-row ak-mb-10">
+          ${colsHTML}
+        </div>
+          `;
+        } else if (widget.type === 'table') {
+          canvasHTML += `
+        <!-- Table Widget Container -->
+        <div class="ak-card ak-mb-24">
+          <div class="ak-card-header ak-d-flex ak-justify-content-between ak-align-items-center">
+            <h5 class="ak-h5 ak-mb-0">${widget.title || 'Recent Database Log'}</h5>
+            <div class="ak-input-group ak-w-30" style="max-width: 260px;">
+              <span class="ak-input-group-text ak-py-4 ak-px-8"><ak-icon set="lucide" name="search" size="14px"></ak-icon></span>
+              <input type="text" class="ak-form-control ak-py-4 ak-px-8 ak-fs-13" placeholder="Filter rows...">
+            </div>
+          </div>
+          <div class="ak-table-responsive">
+            <table class="ak-table ak-table-hover ak-m-0">
+              <thead>
+                <tr>
+                  <th>Client Account</th>
+                  <th>Transaction Timestamp</th>
+                  <th>Total Cost</th>
+                  <th>Gateway Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Olivia Martin</td>
+                  <td>2026-06-12 14:24</td>
+                  <td>$350.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-success ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Success</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Jackson Lee</td>
+                  <td>2026-06-11 09:15</td>
+                  <td>$2,500.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-warning ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Pending</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Isabella Nguyen</td>
+                  <td>2026-06-10 18:40</td>
+                  <td>$120.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-success ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Success</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">William Kim</td>
+                  <td>2026-06-09 11:02</td>
+                  <td>$850.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-danger ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Failed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+          `;
+        } else if (widget.type === 'form') {
+          canvasHTML += `
+        <!-- Profile Customization settings Form -->
+        <div class="ak-card ak-mb-24">
+          <div class="ak-card-header">
+            <h5 class="ak-h5 ak-mb-0">Profile Configurations</h5>
+          </div>
+          <div class="ak-card-body">
+            <div class="ak-row ak-mb-16">
+              <div class="ak-col-12 ak-col-md-6 ak-mb-16">
+                <label class="ak-form-label">Full Account Name</label>
+                <input type="text" class="ak-form-control" value="Akhilesh Kumar" placeholder="First and last name">
+              </div>
+              <div class="ak-col-12 ak-col-md-6 ak-mb-16">
+                <label class="ak-form-label">Corporate Email Address</label>
+                <input type="email" class="ak-form-control" value="akhilesh@company.com" placeholder="name@company.com">
+              </div>
+            </div>
+            <div class="ak-row ak-mb-16">
+              <div class="ak-col-12 ak-col-md-6 ak-mb-16">
+                <label class="ak-form-label">Organizational Role</label>
+                <select class="ak-form-select">
+                  <option selected>System Administrator</option>
+                  <option>Database Operator</option>
+                  <option>Content Writer</option>
+                </select>
+              </div>
+              <div class="ak-col-12 ak-col-md-6 ak-mb-16">
+                <label class="ak-form-label">Location Timezone</label>
+                <select class="ak-form-select">
+                  <option selected>India Standard Time (GMT+5:30)</option>
+                  <option>UTC (GMT+0:00)</option>
+                  <option>Pacific Standard Time (GMT-8:00)</option>
+                </select>
+              </div>
+            </div>
+            <div class="ak-form-check ak-form-switch ak-mb-16">
+              <input type="checkbox" class="ak-form-check-input" id="profileSwitchOpt" checked>
+              <label class="ak-form-label ak-m-0" for="profileSwitchOpt" style="cursor:pointer;">Enable multi-factor authentications</label>
+            </div>
+          </div>
+          <div class="ak-card-footer ak-d-flex ak-justify-content-end ak-gap-12">
+            <button class="ak-btn ak-btn-light">Cancel</button>
+            <button class="ak-btn ak-btn-primary">Save Changes</button>
+          </div>
+        </div>
+          `;
+        }
+      });
+
+      // Output Document Structure
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Preview</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=${cfg.branding.font}:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Link to the local workspace library CSS files -->
+  <link rel="stylesheet" href="${cssLink}?v=${Date.now()}">
+  
+  <style>
+    :root {
+      --ak-primary: #00D4FF;
+      --ak-primary-hover: #0099FF;
+      --ak-primary-light: rgba(0, 212, 255, 0.1);
+    }
+    body {
+      font-family: '${cfg.branding.font}', sans-serif;
+    }
+    .ak-admin-topbar {
+      ${cfg.topbar.sticky ? 'position: sticky; top: 0; z-index: 100;' : ''}
+    }
+    .ak-admin-footer {
+      ${cfg.footer.sticky ? 'position: sticky; bottom: 0; z-index: 90;' : ''}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ak-admin-wrapper">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="ak-admin-sidebar" id="sidebarContainer">
+      <!-- Sidebar Brand Logo -->
+      <div class="ak-p-20 ak-d-flex ak-align-items-center ak-justify-content-between" style="border-bottom: 1px solid #1e293b; height: 70px; overflow: hidden;">
+        <div class="ak-d-flex ak-align-items-center">
+          <span class="ak-badge ak-bg-primary-light ak-text-primary ak-fs-14 ak-fw-bold ak-px-10 ak-py-4 ak-rounded-4">${cfg.branding.logoBadgeText}</span>
+          ${cfg.branding.logoPosition === 'sidebar' ? `<span class="menu-text ak-text-white ak-fs-16 ak-fw-bold ak-ml-12">${cfg.branding.logoText}</span>` : ''}
+        </div>
+        ${cfg.sidebar.showMobileClose ? `
+        <button class="ak-btn ak-btn-light ak-d-md-none ak-p-4 ak-rounded-circle" id="sidebarCloseBtn" style="border: 0; background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <ak-icon set="lucide" name="x" size="16px"></ak-icon>
+        </button>
+        ` : ''}
+      </div>
+      
+      <!-- Menu Navigation Links -->
+      <nav class="ak-mt-20 ak-d-flex ak-flex-column ak-gap-4">
+        ${sidebarItemsHTML}
+      </nav>
+    </aside>
+
+    <!-- Main Content Panel Area -->
+    <div class="ak-admin-main" id="mainPanel">
+      
+      <!-- Topbar Header -->
+      <header class="ak-admin-topbar ak-d-flex ak-align-items-center ak-justify-content-between">
+        <div class="ak-d-flex ak-align-items-center ak-gap-16">
+          ${cfg.sidebar.collapsible ? `
+          <button class="ak-btn ak-btn-sm ak-btn-light" id="sidebarToggleBtn" style="padding: 8px 12px;">
+            <ak-icon set="lucide" name="menu" size="16px"></ak-icon>
+          </button>
+          ` : ''}
+          
+          ${cfg.branding.logoPosition === 'topbar' ? `
+          <div class="ak-d-flex ak-align-items-center ak-gap-8">
+            <span class="ak-fs-16 ak-fw-bold ak-text-dark">${cfg.branding.logoText}</span>
+          </div>
+          ` : ''}
+          
+          ${cfg.topbar.showSearch ? `
+          <div class="ak-input-group ak-d-none ak-d-md-flex" style="width: 240px;">
+            <span class="ak-input-group-text ak-py-4 ak-px-8" style="background:#fff; border-right:0;"><ak-icon set="lucide" name="search" size="14px" color="#94a3b8"></ak-icon></span>
+            <input type="text" class="ak-form-control ak-py-4 ak-px-8 ak-fs-13" placeholder="Global search..." style="border-left:0;">
+          </div>
+          ` : ''}
+        </div>
+        
+        <div class="ak-d-flex ak-align-items-center ak-gap-16">
+          ${cfg.topbar.showNotifications ? `
+          <div style="position:relative; cursor:pointer;">
+            <ak-icon set="lucide" name="bell" size="18px" class="ak-text-secondary"></ak-icon>
+            <span class="ak-badge ak-bg-danger ak-text-white ak-rounded-circle" style="position:absolute; top:-4px; right:-4px; width:12px; height:12px; font-size:7px; padding:0; display:flex; align-items:center; justify-content:center;">3</span>
+          </div>
+          ` : ''}
+          
+          ${cfg.topbar.showProfile ? `
+          <div class="ak-d-flex ak-align-items-center ak-gap-8" style="cursor:pointer;">
+            <div class="ak-badge ak-bg-dark ak-text-white ak-rounded-8 ak-p-8 ak-fs-12">Admin</div>
+          </div>
+          ` : ''}
+        </div>
+      </header>
+
+      <!-- Blank Page Canvas Content -->
+      <main class="ak-admin-content">
+        ${canvasHTML}
+      </main>
+
+      <!-- Footer -->
+      <footer class="ak-admin-footer ak-d-flex ak-justify-content-between ak-align-items-center">
+        <div class="ak-fs-12 ak-text-secondary">${cfg.footer.copyrightText}</div>
+        <div class="ak-fs-12 ak-text-secondary">Dashboard Core v1.1</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Fixed Mobile Bottom Navigation Footer -->
+  <div class="mobile-footer-nav">
+    <button class="mobile-nav-item active" onclick="switchMobileView('layout', this)">
+      <ak-icon name="lucide/layout" size="20px"></ak-icon>
+      <span>Layout</span>
+    </button>
+    <button class="mobile-nav-item" onclick="switchMobileView('widgets', this)">
+      <ak-icon name="lucide/grid" size="20px"></ak-icon>
+      <span>Widgets</span>
+    </button>
+    <button class="mobile-nav-item" onclick="switchMobileView('menu', this)">
+      <ak-icon name="lucide/menu" size="20px"></ak-icon>
+      <span>Menu</span>
+    </button>
+    <button class="mobile-nav-item" onclick="switchMobileView('preview', this)">
+      <ak-icon name="lucide/eye" size="20px"></ak-icon>
+      <span>Preview</span>
+    </button>
+  </div>
+
+  <!-- Include library script -->
+  <script src="${jsLink}?v=${Date.now()}"><\/script>
+  <script>
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebar = document.getElementById('sidebarContainer');
+    const main = document.getElementById('mainPanel');
+    const closeBtn = document.getElementById('sidebarCloseBtn');
+
+    if (toggleBtn && sidebar && main) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.innerWidth > 768) {
+          sidebar.classList.toggle('collapsed');
+          main.classList.toggle('sidebar-collapsed');
+        } else {
+          sidebar.classList.toggle('mobile-open');
+        }
+      });
+      
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          sidebar.classList.remove('mobile-open');
+        });
+      }
+      
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+            sidebar.classList.remove('mobile-open');
+          }
+        }
+      });
+    }
+  <\/script>
+</body>
+</html>`;
+    }
+
+    // Update sandboxed iframe preview
+    function updatePreview() {
+      const iframe = document.getElementById('previewCanvas');
+      const previewDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const html = compileAdminPanelHTML(config);
+      
+      previewDoc.open();
+      previewDoc.write(html);
+      previewDoc.close();
+    }
+
+    // Download compiled HTML file
+    function downloadDesign() {
+      const finalHTML = compileAdminPanelHTML(config);
+      
+      const blob = new Blob([finalHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = 'custom-admin-panel.html';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(url);
+      
+      ak.toast.success('Your custom admin layout was compiled and exported.', 'Design Exported');
+    }
+  </script>
+</body>
+</html>

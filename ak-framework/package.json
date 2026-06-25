@@ -1,0 +1,28 @@
+{
+  "name": "ak-framework",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/generate.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@primer/octicons": "^19.28.1",
+    "@tabler/icons": "^3.44.0",
+    "bootstrap-icons": "^1.13.1",
+    "boxicons": "^2.1.4",
+    "clean-css": "^5.3.3",
+    "feather-icons": "^4.29.2",
+    "ionicons": "^8.0.13",
+    "lucide-static": "^1.17.0",
+    "material-design-icons-svg": "^3.3.1",
+    "remixicon": "^4.9.1",
+    "simple-icons": "^16.23.0",
+    "terser": "^5.48.0"
+  }
+}

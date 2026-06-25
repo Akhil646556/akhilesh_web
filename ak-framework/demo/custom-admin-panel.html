@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Preview</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Link to the local workspace library CSS files -->
+  <link rel="stylesheet" href="../dist/ak-bootstrap.min.css">
+  
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    /* Main Layout Wrappers */
+    .ak-admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f8fafc;
+    }
+    
+    .ak-admin-main {
+      flex-grow: 1;
+      margin-left: 260px;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .ak-admin-main.sidebar-collapsed {
+      margin-left: 70px;
+    }
+    
+    .ak-admin-content {
+      flex-grow: 1;
+      padding: 30px;
+    }
+    
+    .ak-admin-topbar {
+      height: 70px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 30px;
+      position: sticky; top: 0; z-index: 100;
+    }
+    
+    .ak-admin-footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding: 16px 30px;
+      
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ak-admin-wrapper">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="ak-admin-sidebar" id="sidebarContainer">
+      <!-- Sidebar Brand Logo -->
+      <div class="ak-p-20 ak-d-flex ak-align-items-center" style="border-bottom: 1px solid #1e293b; height: 70px; overflow: hidden;">
+        <span class="ak-badge ak-bg-primary-light ak-text-primary ak-fs-14 ak-fw-bold ak-px-10 ak-py-4 ak-rounded-4">AK</span>
+        
+      </div>
+      
+      <!-- Menu Navigation Links -->
+      <nav class="ak-mt-20 ak-d-flex ak-flex-column ak-gap-4">
+        
+        <a class="ak-sidebar-menu-item">
+          <ak-icon set="lucide" name="layout-dashboard" size="18px" color="#94a3b8"></ak-icon>
+          <span class="menu-text">Dashboard Overview</span>
+          <div class="floating-menu">Dashboard Overview</div>
+        </a>
+        <a class="ak-sidebar-menu-item">
+          <ak-icon set="lucide" name="users" size="18px" color="#94a3b8"></ak-icon>
+          <span class="menu-text">User Profiles</span>
+          <div class="floating-menu">Manage User Accounts</div>
+        </a>
+        <a class="ak-sidebar-menu-item">
+          <ak-icon set="lucide" name="activity" size="18px" color="#94a3b8"></ak-icon>
+          <span class="menu-text">System Reports</span>
+          <div class="floating-menu">Performance Analytics</div>
+        </a>
+        <a class="ak-sidebar-menu-item">
+          <ak-icon set="lucide" name="settings" size="18px" color="#94a3b8"></ak-icon>
+          <span class="menu-text">Configuration</span>
+          <div class="floating-menu">System Settings</div>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Panel Area -->
+    <div class="ak-admin-main" id="mainPanel">
+      
+      <!-- Topbar Header -->
+      <header class="ak-admin-topbar ak-d-flex ak-align-items-center ak-justify-content-between">
+        <div class="ak-d-flex ak-align-items-center ak-gap-16">
+          
+          <button class="ak-btn ak-btn-sm ak-btn-light" id="sidebarToggleBtn" style="padding: 8px 12px;">
+            <ak-icon set="lucide" name="menu" size="16px"></ak-icon>
+          </button>
+          
+          
+          
+          <div class="ak-d-flex ak-align-items-center ak-gap-8">
+            <span class="ak-fs-16 ak-fw-bold ak-text-dark">Akhilesh Prajapati</span>
+          </div>
+          
+          
+          
+          <div class="ak-input-group ak-d-none ak-d-md-flex" style="width: 240px;">
+            <span class="ak-input-group-text ak-py-4 ak-px-8" style="background:#fff; border-right:0;"><ak-icon set="lucide" name="search" size="14px" color="#94a3b8"></ak-icon></span>
+            <input type="text" class="ak-form-control ak-py-4 ak-px-8 ak-fs-13" placeholder="Global search..." style="border-left:0;">
+          </div>
+          
+        </div>
+        
+        <div class="ak-d-flex ak-align-items-center ak-gap-16">
+          
+          <div style="position:relative; cursor:pointer;">
+            <ak-icon set="lucide" name="bell" size="18px" class="ak-text-secondary"></ak-icon>
+            <span class="ak-badge ak-bg-danger ak-text-white ak-rounded-circle" style="position:absolute; top:-4px; right:-4px; width:12px; height:12px; font-size:7px; padding:0; display:flex; align-items:center; justify-content:center;">3</span>
+          </div>
+          
+          
+          
+          <div class="ak-d-flex ak-align-items-center ak-gap-8" style="cursor:pointer;">
+            <div class="ak-badge ak-bg-dark ak-text-white ak-rounded-8 ak-p-8 ak-fs-12">Admin</div>
+          </div>
+          
+        </div>
+      </header>
+
+      <!-- Blank Page Canvas Content -->
+      <main class="ak-admin-content">
+        
+        <!-- Page Header Toolbar -->
+        <div class="ak-mb-24 ak-d-flex ak-justify-content-between ak-align-items-center ak-flex-wrap ak-gap-16">
+          <div>
+            <h1 class="ak-h2 ak-text-dark ak-mb-4">Dashboard Overview</h1>
+            <p class="ak-text-secondary ak-fs-14">Welcome back, Admin! Here is your business health snapshot.</p>
+          </div>
+          <div class="ak-d-flex ak-gap-10">
+            <button class="ak-btn ak-btn-sm ak-btn-outline-primary"><ak-icon set="lucide" name="download" size="14px"></ak-icon> Export</button>
+            <button class="ak-btn ak-btn-sm ak-btn-gradient-primary"><ak-icon set="lucide" name="plus" size="14px"></ak-icon> New Entity</button>
+          </div>
+        </div>
+          
+        <!-- Metric Cards Grid -->
+        <div class="ak-row ak-mb-10">
+          
+          <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+            <div class="ak-card">
+              <div class="ak-card-body ak-d-flex ak-align-items-center ak-justify-content-between">
+                <div>
+                  <span class="ak-fs-13 ak-fw-semibold ak-text-secondary ak-d-block ak-mb-6">Total Revenue</span>
+                  <span class="ak-h3 ak-text-dark ak-fw-extrabold ak-d-block ak-mb-4">$84,254</span>
+                  <span class="ak-badge ak-badge-soft-success ak-rounded-4 ak-px-6 ak-py-2 ak-fs-11">
+                    <ak-icon set="lucide" name="trending-up" size="10px" class="ak-mr-4"></ak-icon>+12.5%
+                  </span>
+                </div>
+                <div class="ak-bg-primary-light ak-rounded-12 ak-p-12" style="color: var(--ak-primary);">
+                  <ak-icon set="lucide" name="dollar-sign" size="24px"></ak-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+            <div class="ak-card">
+              <div class="ak-card-body ak-d-flex ak-align-items-center ak-justify-content-between">
+                <div>
+                  <span class="ak-fs-13 ak-fw-semibold ak-text-secondary ak-d-block ak-mb-6">Active Accounts</span>
+                  <span class="ak-h3 ak-text-dark ak-fw-extrabold ak-d-block ak-mb-4">12,480</span>
+                  <span class="ak-badge ak-badge-soft-success ak-rounded-4 ak-px-6 ak-py-2 ak-fs-11">
+                    <ak-icon set="lucide" name="trending-up" size="10px" class="ak-mr-4"></ak-icon>+8.3%
+                  </span>
+                </div>
+                <div class="ak-bg-success-light ak-rounded-12 ak-p-12" style="color: var(--ak-success);">
+                  <ak-icon set="lucide" name="users" size="24px"></ak-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+            <div class="ak-card">
+              <div class="ak-card-body ak-d-flex ak-align-items-center ak-justify-content-between">
+                <div>
+                  <span class="ak-fs-13 ak-fw-semibold ak-text-secondary ak-d-block ak-mb-6">Pending Support</span>
+                  <span class="ak-h3 ak-text-dark ak-fw-extrabold ak-d-block ak-mb-4">18 Tasks</span>
+                  <span class="ak-badge ak-badge-soft-danger ak-rounded-4 ak-px-6 ak-py-2 ak-fs-11">
+                    <ak-icon set="lucide" name="trending-down" size="10px" class="ak-mr-4"></ak-icon>-2.4%
+                  </span>
+                </div>
+                <div class="ak-bg-warning-light ak-rounded-12 ak-p-12" style="color: var(--ak-warning);">
+                  <ak-icon set="lucide" name="alert-circle" size="24px"></ak-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          
+        <!-- Table Widget Container -->
+        <div class="ak-card ak-mb-24">
+          <div class="ak-card-header ak-d-flex ak-justify-content-between ak-align-items-center">
+            <h5 class="ak-h5 ak-mb-0">Recent Activity Logs</h5>
+            <div class="ak-input-group ak-w-30" style="max-width: 260px;">
+              <span class="ak-input-group-text ak-py-4 ak-px-8"><ak-icon set="lucide" name="search" size="14px"></ak-icon></span>
+              <input type="text" class="ak-form-control ak-py-4 ak-px-8 ak-fs-13" placeholder="Filter rows...">
+            </div>
+          </div>
+          <div class="ak-table-responsive">
+            <table class="ak-table ak-table-hover ak-m-0">
+              <thead>
+                <tr>
+                  <th>Client Account</th>
+                  <th>Transaction Timestamp</th>
+                  <th>Total Cost</th>
+                  <th>Gateway Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Olivia Martin</td>
+                  <td>2026-06-12 14:24</td>
+                  <td>$350.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-success ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Success</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Jackson Lee</td>
+                  <td>2026-06-11 09:15</td>
+                  <td>$2,500.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-warning ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Pending</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">Isabella Nguyen</td>
+                  <td>2026-06-10 18:40</td>
+                  <td>$120.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-success ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Success</span></td>
+                </tr>
+                <tr>
+                  <td class="ak-fw-semibold ak-text-dark">William Kim</td>
+                  <td>2026-06-09 11:02</td>
+                  <td>$850.00 USD</td>
+                  <td><span class="ak-badge ak-badge-soft-danger ak-rounded-100 ak-px-8 ak-py-2" style="font-size:10px;">Failed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+          
+      </main>
+
+      <!-- Footer -->
+      <footer class="ak-admin-footer ak-d-flex ak-justify-content-between ak-align-items-center">
+        <div class="ak-fs-12 ak-text-secondary">© 2026 DashBuilder. All rights reserved.</div>
+        <div class="ak-fs-12 ak-text-secondary">Dashboard Core v1.1</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Include library script -->
+  <script src="../dist/ak-bootstrap.min.js"></script>
+  <script>
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebar = document.getElementById('sidebarContainer');
+    const main = document.getElementById('mainPanel');
+
+    if (toggleBtn && sidebar && main) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        main.classList.toggle('sidebar-collapsed');
+      });
+    }
+  </script>
+</body>
+</html>
