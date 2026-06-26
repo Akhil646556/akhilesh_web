@@ -12,6 +12,7 @@
   
   <!-- Our Custom Compiled Framework -->
   <link rel="stylesheet" href="../dist/ak-bootstrap.min.css?v=1.1.2">
+
   
   <style>
     :root {
@@ -487,6 +488,13 @@
             <ul class="ak-d-flex ak-flex-column ak-gap-8" style="list-style: none; padding: 0; margin: 0;">
               <li><a href="#alerts" class="sidebar-link"><ak-icon name="lucide/alert-triangle" size="16px" class="ak-mr-8"></ak-icon>Alerts &amp; Toasts</a></li>
               <li><a href="#dialogs" class="sidebar-link"><ak-icon name="lucide/messages-square" size="16px" class="ak-mr-8"></ak-icon>Modals &amp; Dialogs</a></li>
+            </ul>
+          </div>
+
+          <div class="ak-mb-24">
+            <h6 class="ak-fs-12 ak-fw-bold ak-text-uppercase ak-mb-12" style="letter-spacing: 0.05em; color: #94a3b8 !important;">Creative Addons</h6>
+            <ul class="ak-d-flex ak-flex-column ak-gap-8" style="list-style: none; padding: 0; margin: 0;">
+              <li><a href="#backgrounds" class="sidebar-link"><ak-icon name="lucide/sparkles" size="16px" class="ak-mr-8"></ak-icon>Backgrounds Addon</a></li>
             </ul>
           </div>
 
@@ -1539,7 +1547,84 @@
           </div>
         </div>
       </div>
+    <!-- Section: Background Animations Simulator -->
+    <section id="backgrounds" class="ak-mb-60">
+      <div class="ak-mb-30">
+        <h2 class="ak-h2 ak-text-dark">Background Animation Engine</h2>
+        <p class="ak-text-secondary">Explore 100 premium, GPU-accelerated canvas background animations. Presets 1–30 are hand-crafted; presets 31–100 are procedurally generated with 10 distinct visual categories (flow fields, grid patterns, orbital systems, wave stacks, particle nets, Lissajous curves, nebula blobs, matrix rains, fractal trees, and geometric mandalas). Every preset responds dynamically to mouse coordinates.</p>
+      </div>
+
+      <div class="ak-row">
+        <!-- Presets Selection Panel -->
+        <div class="ak-col-12 ak-col-lg-8 ak-mb-30">
+          <div class="ak-card">
+            <div class="ak-card-header">
+              <h5 class="ak-h5 ak-mb-0">Choose Background Preset (100 Total)</h5>
+            </div>
+            <div class="ak-card-body" style="max-height: 450px; overflow-y: auto;">
+              <div id="bgPresetsContainer" class="ak-d-grid ak-gap-12" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+                <!-- Dynamically populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Preview Panel & Snippet -->
+        <div class="ak-col-12 ak-col-lg-4 ak-mb-30">
+          <div class="ak-card ak-h-100">
+            <div class="ak-card-header">
+              <h5 class="ak-h5 ak-mb-0">Selected Preset Control</h5>
+            </div>
+            <div class="ak-card-body ak-d-flex ak-flex-column ak-justify-content-between">
+              <div>
+                <h6 class="ak-h6 ak-mb-8">Selected: <span id="selectedBgName" class="ak-text-primary">None</span></h6>
+                <p class="ak-text-secondary ak-fs-14 ak-mb-20">Click 'Preview Live' to launch the background animation on this page instantly.</p>
+                
+                <div class="ak-d-flex ak-gap-12 ak-mb-16">
+                  <button class="ak-btn ak-btn-primary ak-flex-grow-1" id="btnBgPreviewLive" onclick="triggerBgPreview()" disabled>
+                    <ak-icon name="lucide/play" size="16px"></ak-icon> Preview Live
+                  </button>
+                  <button class="ak-btn ak-btn-outline-secondary" onclick="clearBgPreview()">
+                    Reset
+                  </button>
+                </div>
+
+                <div class="ak-mb-16">
+                  <label class="ak-form-label ak-fw-semibold ak-fs-13">Color Theme Style:</label>
+                  <select class="ak-form-select" id="bgThemeSelect" onchange="updateBgSelection(true)" disabled>
+                    <option value="base">Default / Original Preset colors</option>
+                    <option value="neon">Cyber Neon (Cyan, Pink, Purple)</option>
+                    <option value="lava">Plasma Lava (Red, Orange, Gold)</option>
+                    <option value="ocean">Deep Ocean (Cyan, Teal, Sapphire)</option>
+                    <option value="forest">Forest Emerald (Mint, Emerald, Moss)</option>
+                    <option value="sunset">Cosmic Sunset (Amber, Purple, Coral)</option>
+                    <option value="mono">Monochrome (White, Gray, Slate)</option>
+                    <option value="matrix">Matrix Terminal (Neon Green, Dark Green)</option>
+                    <option value="aurora">Polar Aurora (Cyan, Green, Violet)</option>
+                    <option value="royal">Royal Gold (Imperial Purple, Gold)</option>
+                  </select>
+                </div>
+
+                <div class="ak-mb-20">
+                  <div class="ak-d-flex ak-justify-content-between ak-align-items-center ak-mb-6">
+                    <label class="ak-form-label ak-fw-semibold ak-fs-13 ak-mb-0">Animation Speed:</label>
+                    <span id="bgSpeedVal" class="ak-fs-12 ak-text-primary ak-fw-bold">1.0x</span>
+                  </div>
+                  <input type="range" class="ak-w-100" id="bgSpeedSlider" min="0.1" max="4.0" step="0.1" value="1.0" oninput="updateBgSpeed(this.value)" disabled>
+                </div>
+              </div>
+
+              <div>
+                <label class="ak-form-label ak-fw-semibold ak-fs-13">Integration Code:</label>
+                <pre class="ak-p-12 ak-bg-dark ak-text-white ak-rounded-8 ak-fs-12 ak-m-0" style="font-family: monospace; overflow-x: auto; color: #ffffff !important; background-color: #0f172a !important; max-height: 200px;" id="bgCodeSnippetDisplay">Select a preset to view code</pre>
+                <button class="ak-btn ak-btn-xs ak-btn-success ak-w-100 ak-mt-12" onclick="copyBgSnippet()">Copy Snippet</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
+    
     <section id="download" class="ak-mb-60">
       <div class="ak-mb-30 ak-d-flex ak-justify-content-between ak-align-items-center ak-flex-wrap ak-gap-16">
         <div>
@@ -1553,7 +1638,7 @@
 
       <div class="ak-row">
         <!-- Core Files Card -->
-        <div class="ak-col-12 ak-col-md-6 ak-mb-24">
+        <div class="ak-col-12 ak-col-lg-4 ak-mb-24">
           <div class="ak-card ak-h-100">
             <div class="ak-card-header">
               <h5 class="ak-h5 ak-mb-0">Core Styling &amp; Logic</h5>
@@ -1562,10 +1647,10 @@
               <p class="ak-text-secondary ak-mb-20">The main framework stylesheet containing the 12-column grid and JIT-compiled Spacing Engine script.</p>
               <div class="ak-d-flex ak-flex-column ak-gap-12">
                 <a href="../dist/ak-bootstrap.min.css" download class="ak-btn ak-btn-primary ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-8">
-                  <ak-icon name="lucide/download" size="18px"></ak-icon> Download ak-bootstrap.min.css (Grid + Spacing)
+                  <ak-icon name="lucide/download" size="18px"></ak-icon> Download ak-bootstrap.min.css
                 </a>
                 <a href="../dist/ak-bootstrap.min.js" download class="ak-btn ak-btn-outline-primary ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-8">
-                  <ak-icon name="lucide/download" size="18px"></ak-icon> Download ak-bootstrap.min.js (JIT Compiler + Alerts)
+                  <ak-icon name="lucide/download" size="18px"></ak-icon> Download ak-bootstrap.min.js
                 </a>
               </div>
             </div>
@@ -1573,7 +1658,7 @@
         </div>
 
         <!-- Standalone Icons Card -->
-        <div class="ak-col-12 ak-col-md-6 ak-mb-24">
+        <div class="ak-col-12 ak-col-lg-4 ak-mb-24">
           <div class="ak-card ak-h-100">
             <div class="ak-card-header">
               <h5 class="ak-h5 ak-mb-0">Standalone Icon Packs (JS Bundles)</h5>
@@ -1582,25 +1667,42 @@
               <p class="ak-text-secondary ak-mb-20">Download pre-compiled JavaScript bundles containing entire icon sets. Loads all SVGs in-memory instantly with zero CORS issues.</p>
               <div class="ak-row">
                 <div class="ak-col-12 ak-col-sm-6 ak-mb-12">
-                  <a href="../dist/ak-icons-lucide.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4">
-                    <ak-icon name="lucide/download" size="14px"></ak-icon> Lucide Set (1,962 Icons)
+                  <a href="../dist/ak-icons-lucide.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4 ak-text-white ak-border-white">
+                    <ak-icon name="lucide/download" size="14px"></ak-icon> Lucide (1,962 Icons)
                   </a>
                 </div>
                 <div class="ak-col-12 ak-col-sm-6 ak-mb-12">
-                  <a href="../dist/ak-icons-fa-solid.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4">
-                    <ak-icon name="lucide/download" size="14px"></ak-icon> FA Solid (2,000 Icons)
+                  <a href="../dist/ak-icons-fa-solid.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4 ak-text-white ak-border-white">
+                    <ak-icon name="lucide/download" size="14px"></ak-icon> FA Solid (2,000)
                   </a>
                 </div>
                 <div class="ak-col-12 ak-col-sm-6 ak-mb-12">
-                  <a href="../dist/ak-icons-bootstrap.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4">
-                    <ak-icon name="lucide/download" size="14px"></ak-icon> Bootstrap (2,078 Icons)
+                  <a href="../dist/ak-icons-bootstrap.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4 ak-text-white ak-border-white">
+                    <ak-icon name="lucide/download" size="14px"></ak-icon> Bootstrap (2,078)
                   </a>
                 </div>
                 <div class="ak-col-12 ak-col-sm-6 ak-mb-12">
-                  <a href="../dist/ak-icons-material.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4">
-                    <ak-icon name="lucide/download" size="14px"></ak-icon> Material (7,550 Icons)
+                  <a href="../dist/ak-icons-material.min.js" download class="ak-btn ak-btn-sm ak-btn-outline-dark ak-w-100 ak-d-inline-flex ak-align-items-center ak-justify-content-center ak-gap-4 ak-text-white ak-border-white">
+                    <ak-icon name="lucide/download" size="14px"></ak-icon> Material (7,550)
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Backgrounds Card -->
+        <div class="ak-col-12 ak-col-lg-4 ak-mb-24">
+          <div class="ak-card ak-h-100">
+            <div class="ak-card-header">
+              <h5 class="ak-h5 ak-mb-0">Backgrounds &amp; Cursors (Built-in)</h5>
+            </div>
+            <div class="ak-card-body">
+              <p class="ak-text-secondary ak-mb-20">All 100 interactive backgrounds and cursor animations are compiled directly inside the core framework files to reduce file counts and ease deployments. Presets 1–30 hand-crafted, 31–100 procedural.</p>
+              <div class="ak-d-flex ak-flex-column ak-gap-12">
+                <span class="ak-badge ak-badge-soft-success ak-text-center ak-py-12 ak-px-16" style="border-radius: 6px; font-weight: 600;">
+                  <ak-icon name="lucide/check-circle" size="18px" style="vertical-align: middle; margin-right: 6px;"></ak-icon> Included in ak-bootstrap.min.js &amp; css
+                </span>
               </div>
             </div>
           </div>
@@ -4027,6 +4129,206 @@
         });
       }
     });
+
+    // --- Backgrounds Engine Playground Logic ---
+    let currentSelectedBgPreset = '';
+
+    (function populateBgPresets() {
+      const container = document.getElementById('bgPresetsContainer');
+      if (!container) return;
+
+      const namedPresets = [
+        { cls: 'ak-bg-code-universe',     label: '1. Code Universe' },
+        { cls: 'ak-bg-star-drift',        label: '2. Star Drift' },
+        { cls: 'ak-bg-matrix-rain',       label: '3. Matrix Rain' },
+        { cls: 'ak-bg-aurora-glow',       label: '4. Aurora Glow' },
+        { cls: 'ak-bg-snowfall',          label: '5. Snowfall' },
+        { cls: 'ak-bg-fireflies',         label: '6. Fireflies' },
+        { cls: 'ak-bg-galaxy-vortex',     label: '7. Galaxy Vortex' },
+        { cls: 'ak-bg-wave-sine',         label: '8. Wave Sine' },
+        { cls: 'ak-bg-matrix-horizontal', label: '9. Matrix Side' },
+        { cls: 'ak-bg-confetti',          label: '10. Confetti' },
+        { cls: 'ak-bg-clouds',            label: '11. Clouds' },
+        { cls: 'ak-bg-tunnel-warp',       label: '12. Tunnel Warp' },
+        { cls: 'ak-bg-honeycomb-hex',     label: '13. Honeycomb Hex' },
+        { cls: 'ak-bg-floating-bubbles',  label: '14. Bubbles' },
+        { cls: 'ak-bg-diagonal-lines',    label: '15. Diagonal Lines' },
+        { cls: 'ak-bg-rainbow-flow',      label: '16. Rainbow Flow' },
+        { cls: 'ak-bg-sakura-bloom',      label: '17. Sakura Bloom' },
+        { cls: 'ak-bg-deep-ocean',        label: '18. Deep Ocean' },
+        { cls: 'ak-bg-geometric-shapes',  label: '19. Geometry' },
+        { cls: 'ak-bg-digital-glitch',    label: '20. Glitch Effect' },
+        { cls: 'ak-bg-bouncing-physics',  label: '21. Bouncing Physics' },
+        { cls: 'ak-bg-smoke-nebula',      label: '22. Smoke Nebula' },
+        { cls: 'ak-bg-dna-helix',         label: '23. DNA Helix' },
+        { cls: 'ak-bg-circuit-board',     label: '24. Circuit Board' },
+        { cls: 'ak-bg-shooting-stars',    label: '25. Shooting Stars' },
+        { cls: 'ak-bg-outrun-grid',       label: '26. Outrun Grid' },
+        { cls: 'ak-bg-water-ripple',      label: '27. Water Ripple' },
+        { cls: 'ak-bg-fractal-growth',    label: '28. Fractal Growth' },
+        { cls: 'ak-bg-audio-waves',       label: '29. Audio Waves' },
+        { cls: 'ak-bg-kaleidoscope',      label: '30. Kaleidoscope' }
+      ];
+
+      const proceduralLabels = [
+        '31. Flow Field',      '32. Vortex Flow',     '33. Diagonal Flow',
+        '34. Grid Flow',       '35. Cursor Flow',     '36. Wave Flow',
+        '37. Pulse Flow',      '38. Ring Circles',    '39. Scale Dots',
+        '40. Scale Squares',   '41. Scale Lines',     '42. Scale Triangles',
+        '43. Scale Ripple',    '44. Scale Dance',     '45. Orbital Drift',
+        '46. Cursor Orbit',    '47. Twin Orbit',      '48. Spiral Orbit',
+        '49. Ring Orbit',      '50. Halo Orbit',      '51. Dual Halo',
+        '52. Wave Stack',      '53. Wave Layers',     '54. Wave Ripple',
+        '55. Wave Cursor',     '56. Deep Wave',       '57. Ocean Wave',
+        '58. Cross Wave',      '59. Particle Net',    '60. Scatter Net',
+        '61. Mesh Field',      '62. Web Lattice',     '63. Node Cloud',
+        '64. Vertex Map',      '65. Connection Web',  '66. Lissajous A',
+        '67. Lissajous B',     '68. Lissajous C',     '69. Lissajous D',
+        '70. Lissajous E',     '71. Lissajous F',     '72. Lissajous G',
+        '73. Nebula Glow',     '74. Aurora Blob',     '75. Plasma Blob',
+        '76. Gas Cloud',       '77. Mist Field',      '78. Fog Drift',
+        '79. Ember Cloud',     '80. Binary Rain',     '81. Hex Rain',
+        '82. Symbol Rain',     '83. Code Shower',     '84. Data Storm',
+        '85. Glyph Cascade',   '86. Text Matrix',     '87. Tree Branch',
+        '88. Root Spread',     '89. Vine Grow',       '90. Canopy',
+        '91. Fractal Tree',    '92. Neural Tree',     '93. Vine Burst',
+        '94. Wheel Spin',      '95. Petal Burst',     '96. Star Wheel',
+        '97. Mandala',         '98. Geo Spin',        '99. Radial Dance',
+        '100. Kalei Wheel'
+      ];
+
+      let html = '';
+      namedPresets.forEach(p => {
+        html += `<button class="ak-btn ak-btn-outline-primary ak-btn-sm" onclick="selectBgPreset('${p.cls}')">${p.label}</button>`;
+      });
+      proceduralLabels.forEach((label, i) => {
+        const num = 31 + i;
+        html += `<button class="ak-btn ak-btn-outline-secondary ak-btn-sm" onclick="selectBgPreset('ak-bg-preset-${num}')">${label}</button>`;
+      });
+      container.innerHTML = html;
+    })();
+    
+    window.selectBgPreset = function(presetClass) {
+      currentSelectedBgPreset = presetClass;
+      
+      // Enable controls
+      document.getElementById('bgThemeSelect').removeAttribute('disabled');
+      document.getElementById('bgSpeedSlider').removeAttribute('disabled');
+      document.getElementById('btnBgPreviewLive').removeAttribute('disabled');
+      
+      document.getElementById('selectedBgName').textContent = presetClass.replace('ak-bg-', '').replace(/-/g, ' ').toUpperCase();
+      
+      updateBgSelection(false);
+    };
+
+    window.updateBgSpeed = function(val) {
+      document.getElementById('bgSpeedVal').textContent = parseFloat(val).toFixed(1) + 'x';
+      
+      if (window.akBackgrounds) {
+        window.akBackgrounds.setSpeed(val);
+      }
+      
+      const canvas = document.querySelector('canvas.ak-bg-animate');
+      if (canvas) {
+        canvas.setAttribute('data-ak-bg-speed', val);
+      }
+      
+      updateBgSelection(false);
+    };
+
+    window.updateBgSelection = function(retriggerPreview = false) {
+      if (!currentSelectedBgPreset) return;
+      
+      const themeVal = document.getElementById('bgThemeSelect').value;
+      const speedVal = document.getElementById('bgSpeedSlider').value;
+      
+      let finalPresetClass = currentSelectedBgPreset;
+      if (themeVal !== 'base') {
+        finalPresetClass = `${currentSelectedBgPreset}-${themeVal}`;
+      }
+      
+      let speedAttr = '';
+      if (parseFloat(speedVal) !== 1.0) {
+        speedAttr = ` data-ak-bg-speed="${speedVal}"`;
+      }
+      
+      const snippet = `<!-- 1. Include core CSS & JS (already includes backgrounds/cursors) -->
+<link rel="stylesheet" href="ak-bootstrap.min.css">
+<script src="ak-bootstrap.min.js"><\/script>
+
+<!-- 2. Create the Canvas element in body -->
+<canvas class="ak-bg-animate ${finalPresetClass}"${speedAttr}></canvas>
+
+<!-- 3. Initialize background animations -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.akBackgrounds && typeof window.akBackgrounds.initAll === 'function') {
+      window.akBackgrounds.initAll();
+    }
+  });
+<\/script>`;
+      document.getElementById('bgCodeSnippetDisplay').textContent = snippet;
+      
+      const hasActiveCanvas = document.querySelector('canvas.ak-bg-animate') !== null;
+      if (hasActiveCanvas && retriggerPreview) {
+        triggerBgPreview();
+      }
+    };
+
+    window.triggerBgPreview = function() {
+      if (!currentSelectedBgPreset) return;
+
+      const themeVal = document.getElementById('bgThemeSelect').value;
+      const speedVal = document.getElementById('bgSpeedSlider').value;
+
+      let finalPresetClass = currentSelectedBgPreset;
+      if (themeVal !== 'base') {
+        finalPresetClass = currentSelectedBgPreset + '-' + themeVal;
+      }
+
+      // Clear any existing animation canvases
+      document.querySelectorAll('canvas.ak-bg-animate').forEach(function(c) { c.remove(); });
+
+      // Create new canvas with selected preset class
+      const canvas = document.createElement('canvas');
+      canvas.className = 'ak-bg-animate ' + finalPresetClass;
+      if (parseFloat(speedVal) !== 1.0) {
+        canvas.setAttribute('data-ak-bg-speed', speedVal);
+      }
+      document.body.appendChild(canvas);
+
+      // Init directly on the new canvas (avoids race conditions with initAll)
+      if (window.akBackgrounds) {
+        if (typeof window.akBackgrounds.init === 'function') {
+          window.akBackgrounds.init(canvas);
+          ak.toast.success(finalPresetClass.replace('ak-bg-', '').replace(/-/g, ' ').toUpperCase() + ' animation is now live!', 'Preview Started');
+        } else if (typeof window.akBackgrounds.initAll === 'function') {
+          window.akBackgrounds.initAll();
+          ak.toast.success(finalPresetClass.replace('ak-bg-', '').replace(/-/g, ' ').toUpperCase() + ' animation is now live!', 'Preview Started');
+        } else {
+          ak.toast.danger('akBackgrounds.init() not found.', 'Error');
+        }
+      } else {
+        ak.toast.danger('akBackgrounds library not loaded. Check that ak-bootstrap.min.js is loaded.', 'Initialization Failed');
+      }
+    };
+
+    window.clearBgPreview = function() {
+      const existingCanvases = document.querySelectorAll('canvas.ak-bg-animate');
+      existingCanvases.forEach(c => c.remove());
+      ak.toast.info('Background animation overlays cleared.', 'Cleared');
+    };
+
+    window.copyBgSnippet = function() {
+      const code = document.getElementById('bgCodeSnippetDisplay').textContent;
+      if (code === 'Select a preset to view code') {
+        ak.toast.warning('Please select a preset first.', 'Selection Empty');
+        return;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        ak.toast.success('Background integration snippet copied!', 'Copied');
+      });
+    };
 
     function cleanHTMLSnippet(html) {
       let lines = html.split('\n');
