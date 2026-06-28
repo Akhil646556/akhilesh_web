@@ -1625,6 +1625,86 @@
       </div>
     </section>
     
+    <!-- Section: Cursor Animations Simulator -->
+    <section id="cursors" class="ak-mb-60">
+      <div class="ak-mb-30">
+        <h2 class="ak-h2 ak-text-dark">Particle Cursor &amp; Click Engine</h2>
+        <p class="ak-text-secondary">Inject interactive particle trails, burst click effects, and custom vector designs. Choose from 100 hover animations, 100 click effects, and 100 custom cursor designs. Adjust speed, theme styles, or toggle the entire engine on and off. Works 100% offline.</p>
+      </div>
+
+      <div class="ak-row">
+        <!-- Control Panel -->
+        <div class="ak-col-12 ak-col-lg-8 ak-mb-30">
+          <div class="ak-card">
+            <div class="ak-card-header ak-d-flex ak-justify-content-between ak-align-items-center">
+              <h5 class="ak-h5 ak-mb-0">Cursor Engine Configurations</h5>
+              <div class="ak-form-switch ak-d-inline-flex ak-align-items-center">
+                <input type="checkbox" id="chkCursorEnabled" onchange="toggleCursorEngine(this.checked)">
+                <label for="chkCursorEnabled" class="ak-form-label ak-ml-8 ak-m-0" style="cursor: pointer;">Enable Engine</label>
+              </div>
+            </div>
+            <div class="ak-card-body">
+              <div class="ak-row">
+                <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+                  <label class="ak-form-label ak-fw-semibold ak-fs-13">1. Cursor Hover Animation (1–100):</label>
+                  <select class="ak-form-select" id="selCursorHover" onchange="applyCursorSettings()" disabled>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+                <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+                  <label class="ak-form-label ak-fw-semibold ak-fs-13">2. Click Ripple Effect (1–100):</label>
+                  <select class="ak-form-select" id="selCursorClick" onchange="applyCursorSettings()" disabled>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+                <div class="ak-col-12 ak-col-md-4 ak-mb-20">
+                  <label class="ak-form-label ak-fw-semibold ak-fs-13">3. Custom Cursor Design (1–100):</label>
+                  <select class="ak-form-select" id="selCursorDesign" onchange="applyCursorSettings()" disabled>
+                    <option value="0">Default Browser Cursor</option>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="ak-row">
+                <div class="ak-col-12 ak-col-md-6 ak-mb-20">
+                  <div class="ak-d-flex ak-justify-content-between ak-align-items-center ak-mb-6">
+                    <label class="ak-form-label ak-fw-semibold ak-fs-13 ak-mb-0">Particle Speed Multiplier:</label>
+                    <span id="cursorSpeedVal" class="ak-fs-12 ak-text-primary ak-fw-bold">1.0x</span>
+                  </div>
+                  <input type="range" class="ak-w-100" id="cursorSpeedSlider" min="0.1" max="4.0" step="0.1" value="1.0" oninput="updateCursorSpeed(this.value)" disabled>
+                </div>
+                <div class="ak-col-12 ak-col-md-6 ak-d-flex ak-align-items-end ak-mb-20">
+                  <button class="ak-btn ak-btn-outline-danger ak-w-100" onclick="resetCursorPlayground()">
+                    Reset Engine to Defaults
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info & Snippet Panel -->
+        <div class="ak-col-12 ak-col-lg-4 ak-mb-30">
+          <div class="ak-card ak-h-100">
+            <div class="ak-card-header">
+              <h5 class="ak-h5 ak-mb-0">Integration Guide</h5>
+            </div>
+            <div class="ak-card-body ak-d-flex ak-flex-column ak-justify-content-between">
+              <div>
+                <p class="ak-text-secondary ak-fs-13 ak-mb-16">Enable cursor features with these setup APIs. Copy the snippet below to initialize inside your target pages.</p>
+              </div>
+              <div>
+                <label class="ak-form-label ak-fw-semibold ak-fs-13">Cursor Snippet:</label>
+                <pre class="ak-p-12 ak-bg-dark ak-text-white ak-rounded-8 ak-fs-12 ak-m-0" style="font-family: monospace; overflow-x: auto; color: #ffffff !important; background-color: #0f172a !important; max-height: 180px;" id="cursorCodeSnippetDisplay">Enable the engine to see code</pre>
+                <button class="ak-btn ak-btn-xs ak-btn-success ak-w-100 ak-mt-12" onclick="copyCursorSnippet()">Copy Code</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
     <section id="download" class="ak-mb-60">
       <div class="ak-mb-30 ak-d-flex ak-justify-content-between ak-align-items-center ak-flex-wrap ak-gap-16">
         <div>
@@ -4203,7 +4283,7 @@
       });
       proceduralLabels.forEach((label, i) => {
         const num = 31 + i;
-        html += `<button class="ak-btn ak-btn-outline-secondary ak-btn-sm" onclick="selectBgPreset('ak-bg-preset-${num}')">${label}</button>`;
+        html += `<button class="ak-btn ak-btn-outline-primary ak-btn-sm" onclick="selectBgPreset('ak-bg-preset-${num}')">${label}</button>`;
       });
       container.innerHTML = html;
     })();
@@ -4327,6 +4407,147 @@
       }
       navigator.clipboard.writeText(code).then(() => {
         ak.toast.success('Background integration snippet copied!', 'Copied');
+      });
+    };
+
+    // --- Cursors Engine Playground Logic ---
+    (function populateCursorOptions() {
+      const shapes = [
+        'circle', 'star', 'square', 'ring', 'heart', 'spark', 'bubble', 'text', 'line',
+        'triangle', 'diamond', 'cross', 'plus', 'hex', 'pentagon', 'octagon', 'arrow',
+        'chevron', 'leaf', 'flower', 'cloud', 'sun', 'moon', 'lightning', 'fire',
+        'water', 'snowflake', 'smile', 'frown', 'ghost', 'skull', 'alien', 'robot',
+        'crown', 'gem', 'key', 'ring-double', 'infinite', 'yin-yang', 'peace', 'music',
+        'bell', 'clock', 'compass', 'globe', 'anchor', 'fish', 'bird', 'butterfly',
+        'paw', 'tree', 'cactus', 'cherry', 'apple', 'banana', 'grape', 'coffee',
+        'pizza', 'cookie', 'cupcake', 'candy', 'gift', 'balloon', 'umbrella', 'book',
+        'pencil', 'scissors', 'wrench', 'gear', 'hammer', 'shield', 'sword', 'arrow-up',
+        'arrow-right', 'arrow-down', 'arrow-left', 'check', 'close', 'info', 'alert',
+        'question', 'heart-broken', 'star-empty', 'square-empty', 'triangle-empty',
+        'diamond-empty', 'cross-empty', 'plus-empty', 'hex-empty', 'pentagon-empty',
+        'octagon-empty', 'arrow-empty', 'leaf-empty', 'flower-empty', 'cloud-empty',
+        'sun-empty', 'moon-empty', 'snowflake-empty', 'smile-empty', 'ghost-empty'
+      ];
+      const motions = ['drift', 'float', 'gravity', 'explode', 'orbit', 'wave', 'spiral'];
+      const themes = ['neon', 'lava', 'ocean', 'forest', 'sunset', 'mono', 'matrix', 'aurora', 'royal'];
+
+      const selHover = document.getElementById('selCursorHover');
+      const selClick = document.getElementById('selCursorClick');
+      const selDesign = document.getElementById('selCursorDesign');
+
+      if (!selHover || !selClick || !selDesign) return;
+
+      let hoverHtml = '<option value="0">None (Disabled)</option>';
+      let clickHtml = '<option value="0">None (Disabled)</option>';
+      let designHtml = '<option value="0">Default Browser Cursor (None)</option>';
+
+      for (let i = 1; i <= 100; i++) {
+        const shape = shapes[(i - 1) % shapes.length];
+        const motion = motions[Math.floor((i - 1) / shapes.length) % motions.length];
+        const theme = themes[Math.floor((i - 1) / (shapes.length * motions.length)) % themes.length];
+
+        const label = `${i}. ${shape.toUpperCase()} (${motion} / ${theme})`;
+        hoverHtml += `<option value="${i}"${i === 1 ? ' selected' : ''}>${label}</option>`;
+        clickHtml += `<option value="${i}"${i === 1 ? ' selected' : ''}>${label}</option>`;
+        
+        const designLabel = `${i}. ${shape.toUpperCase()} Pointer`;
+        designHtml += `<option value="${i}">${designLabel}</option>`;
+      }
+
+      selHover.innerHTML = hoverHtml;
+      selClick.innerHTML = clickHtml;
+      selDesign.innerHTML = designHtml;
+    })();
+
+    window.toggleCursorEngine = function(enabled) {
+      const selHover = document.getElementById('selCursorHover');
+      const selClick = document.getElementById('selCursorClick');
+      const selDesign = document.getElementById('selCursorDesign');
+      const slider = document.getElementById('cursorSpeedSlider');
+
+      if (enabled) {
+        selHover.removeAttribute('disabled');
+        selClick.removeAttribute('disabled');
+        selDesign.removeAttribute('disabled');
+        slider.removeAttribute('disabled');
+        if (window.akCursors) {
+          window.akCursors.setEnabled(true);
+        }
+        applyCursorSettings();
+      } else {
+        selHover.setAttribute('disabled', 'true');
+        selClick.setAttribute('disabled', 'true');
+        selDesign.setAttribute('disabled', 'true');
+        slider.setAttribute('disabled', 'true');
+        if (window.akCursors) {
+          window.akCursors.setEnabled(false);
+        }
+        document.getElementById('cursorCodeSnippetDisplay').textContent = 'Enable the engine to see code';
+      }
+    };
+
+    window.applyCursorSettings = function() {
+      const hoverVal = document.getElementById('selCursorHover').value;
+      const clickVal = document.getElementById('selCursorClick').value;
+      const designVal = document.getElementById('selCursorDesign').value;
+      const speedVal = document.getElementById('cursorSpeedSlider').value;
+
+      if (window.akCursors) {
+        window.akCursors.setCursorEffect(hoverVal);
+        window.akCursors.setClickEffect(clickVal);
+        window.akCursors.setCursorDesign(designVal);
+      }
+
+      // Generate integration snippet code
+      let initParams = [];
+      if (parseInt(hoverVal) !== 1) initParams.push(`akCursors.setCursorEffect(${hoverVal});`);
+      if (parseInt(clickVal) !== 1) initParams.push(`akCursors.setClickEffect(${clickVal});`);
+      if (parseInt(designVal) !== 0) initParams.push(`akCursors.setCursorDesign(${designVal});`);
+      if (parseFloat(speedVal) !== 1.0) initParams.push(`akCursors.setSpeedMultiplier(${speedVal});`);
+
+      const snippet = `<!-- 1. Include core CSS & JS -->
+<link rel="stylesheet" href="ak-bootstrap.min.css">
+<script src="ak-bootstrap.min.js"><\/script>
+
+<!-- 2. Initialize and configure cursors -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.akCursors) {
+      window.akCursors.setEnabled(true);
+      ${initParams.join('\n      ')}
+    }
+  });
+<\/script>`;
+      document.getElementById('cursorCodeSnippetDisplay').textContent = snippet;
+    };
+
+    window.updateCursorSpeed = function(val) {
+      document.getElementById('cursorSpeedVal').textContent = parseFloat(val).toFixed(1) + 'x';
+      if (window.akCursors) {
+        window.akCursors.setSpeedMultiplier(val);
+      }
+      applyCursorSettings();
+    };
+
+    window.resetCursorPlayground = function() {
+      document.getElementById('chkCursorEnabled').checked = false;
+      document.getElementById('selCursorHover').value = "1";
+      document.getElementById('selCursorClick').value = "1";
+      document.getElementById('selCursorDesign').value = "0";
+      document.getElementById('cursorSpeedSlider').value = "1.0";
+      document.getElementById('cursorSpeedVal').textContent = "1.0x";
+      toggleCursorEngine(false);
+      ak.toast.info('Cursor engine settings reset to default.', 'Settings Reset');
+    };
+
+    window.copyCursorSnippet = function() {
+      const code = document.getElementById('cursorCodeSnippetDisplay').textContent;
+      if (code === 'Enable the engine to see code') {
+        ak.toast.warning('Please enable the engine first.', 'Engine Disabled');
+        return;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        ak.toast.success('Cursor integration snippet copied!', 'Copied');
       });
     };
 

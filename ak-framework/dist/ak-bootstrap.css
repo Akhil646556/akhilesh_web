@@ -2671,3 +2671,9 @@ ak-icon, .ak-icon {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* Rule to hide the default browser pointer when custom cursor is active */
+.ak-cursor-none, .ak-cursor-none *,
+.ak-cursor-none, .ak-cursor-none * {
+  cursor: none !important;
+}

@@ -1206,6 +1206,12 @@ ${Object.keys(colors).map(color => `
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* Rule to hide the default browser pointer when custom cursor is active */
+.ak-cursor-none, .ak-cursor-none *,
+.${prefix}-cursor-none, .${prefix}-cursor-none * {
+  cursor: none !important;
+}
 `;
 
 
@@ -1772,6 +1778,7 @@ let js = `/**
     let cursorEffect = 1;
     let clickEffect = 1;
     let speedMultiplier = 1.0;
+    let cursorDesign = 0;
     
     let canvas = null;
     let ctx = null;
@@ -1794,10 +1801,13 @@ let js = `/**
       isMoving = true;
       clearTimeout(moveTimeout);
       moveTimeout = setTimeout(() => { isMoving = false; }, 100);
+    });
 
-      if (enabled) {
-        spawnHoverParticles();
-      }
+    window.addEventListener('mouseleave', () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+      mouse.vx = 0;
+      mouse.vy = 0;
     });
 
     window.addEventListener('click', (e) => {
@@ -1861,7 +1871,7 @@ let js = `/**
     }
 
     function spawnHoverParticles() {
-      if (!ctx) return;
+      if (!ctx || cursorEffect <= 0) return;
       const config = getPresetConfig(cursorEffect);
       const speed = Math.sqrt(mouse.vx * mouse.vx + mouse.vy * mouse.vy);
       const count = Math.min(5, Math.max(1, Math.floor(speed / 5)));
@@ -1883,10 +1893,13 @@ let js = `/**
           rotSpeed: (Math.random() - 0.5) * 0.1
         });
       }
+      if (particles.length > 150) {
+        particles.splice(0, particles.length - 150);
+      }
     }
 
     function spawnClickParticles(x, y) {
-      if (!ctx) return;
+      if (!ctx || clickEffect <= 0) return;
       const config = getPresetConfig(clickEffect);
       const count = 30;
       
@@ -1909,6 +1922,9 @@ let js = `/**
           angle: Math.random() * Math.PI * 2,
           rotSpeed: (Math.random() - 0.5) * 0.2
         });
+      }
+      if (particles.length > 150) {
+        particles.splice(0, particles.length - 150);
       }
     }
 
@@ -1954,6 +1970,12 @@ let js = `/**
     function animate() {
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      if (enabled && isMoving && cursorEffect > 0) {
+        spawnHoverParticles();
+      }
+      mouse.vx *= 0.95;
+      mouse.vy *= 0.95;
       
       if (particles.length > 0) {
         const dt = speedMultiplier;
@@ -2049,6 +2071,74 @@ let js = `/**
         }
       }
 
+      // Draw custom cursor design if enabled and mouse is inside window
+      if (enabled && cursorDesign > 0 && mouse.x !== -1000) {
+        const config = getPresetConfig(cursorDesign);
+        ctx.save();
+        ctx.translate(mouse.x, mouse.y);
+        ctx.globalAlpha = 1.0;
+        
+        const size = 8;
+        const color = config.colors[0];
+        
+        if (config.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, size, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 1.8, 0, Math.PI * 2);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else if (config.shape === 'ring') {
+          ctx.beginPath();
+          ctx.arc(0, 0, size, 0, Math.PI * 2);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } else if (config.shape === 'square') {
+          ctx.fillStyle = color;
+          ctx.fillRect(-size, -size, size * 2, size * 2);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-size * 1.5, -size * 1.5, size * 3, size * 3);
+        } else if (config.shape === 'star') {
+          drawStar(ctx, 0, 0, 5, size * 1.5, size * 0.7, color);
+        } else if (config.shape === 'heart') {
+          drawHeart(ctx, 0, -size / 2, size * 1.2, color);
+        } else if (config.shape === 'spark') {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(-size * 1.5, 0); ctx.lineTo(size * 1.5, 0);
+          ctx.moveTo(0, -size * 1.5); ctx.lineTo(0, size * 1.5);
+          ctx.stroke();
+        } else if (config.shape === 'bubble') {
+          ctx.beginPath();
+          ctx.arc(0, 0, size, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+          ctx.fill();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else if (config.shape === 'text') {
+          ctx.font = \`bold \${size * 1.8}px monospace\`;
+          ctx.fillStyle = color;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('+', 0, 0);
+        } else if (shapeEmojis[config.shape]) {
+          ctx.font = \`\${size * 2}px Arial, sans-serif\`;
+          ctx.fillStyle = color;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(shapeEmojis[config.shape], 0, 0);
+        }
+        
+        ctx.restore();
+      }
+
       requestAnimationFrame(animate);
     }
 
@@ -2075,16 +2165,37 @@ let js = `/**
         enabled = !!val;
         if (enabled) {
           initCanvas();
-        } else if (ctx) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          particles = [];
+          if (cursorDesign > 0) {
+            document.body.classList.add('\${prefix}-cursor-none');
+          }
+        } else {
+          document.body.classList.remove('\${prefix}-cursor-none');
+          if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = [];
+          }
         }
       },
       setCursorEffect(index) {
-        cursorEffect = parseInt(index, 10) || 1;
+        const val = parseInt(index, 10);
+        cursorEffect = isNaN(val) ? 1 : val;
       },
       setClickEffect(index) {
-        clickEffect = parseInt(index, 10) || 1;
+        const val = parseInt(index, 10);
+        clickEffect = isNaN(val) ? 1 : val;
+      },
+      setCursorDesign(index) {
+        const val = parseInt(index, 10);
+        cursorDesign = isNaN(val) ? 0 : val;
+        if (enabled) {
+          if (cursorDesign > 0) {
+            document.body.classList.add('\${prefix}-cursor-none');
+          } else {
+            document.body.classList.remove('\${prefix}-cursor-none');
+          }
+        } else {
+          document.body.classList.remove('\${prefix}-cursor-none');
+        }
       },
       setSpeedMultiplier(val) {
         speedMultiplier = parseFloat(val) || 1.0;
@@ -3646,7 +3757,7 @@ let js = `/**
         h = canvas.height = window.innerHeight;
       });
 
-      const defaultColors = ['rgba(0, 212, 255, 0.08)', 'rgba(168, 85, 247, 0.08)'];
+      const defaultColors = ['#00D4FF', '#A855F7'];
       const colors = getThemeColors(presetClass, defaultColors);
 
       const localMouse = { x: undefined, y: undefined };
@@ -3736,6 +3847,7 @@ let js = `/**
         angleOffset += 0.01 * speed;
 
         if (category === 0) {
+          ctx.globalAlpha = 0.55;
           particles.forEach(p => {
             let flowAngle = 0;
             if (subIndex === 0) flowAngle = Math.sin(p.x * 0.005) * Math.cos(p.y * 0.005) * Math.PI * 2;
@@ -3758,10 +3870,12 @@ let js = `/**
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
           });
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 1) {
           const step = 40;
           ctx.lineWidth = 1;
+          ctx.globalAlpha = 0.15;
           for (let x = step; x < w; x += step) {
             for (let y = step; y < h; y += step) {
               ctx.save();
@@ -3793,6 +3907,7 @@ let js = `/**
               ctx.restore();
             }
           }
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 2) {
           particles.forEach(p => {
@@ -3811,22 +3926,24 @@ let js = `/**
             const y = cy + Math.sin(p.angle) * p.radius;
 
             ctx.fillStyle = p.color;
+            ctx.globalAlpha = 0.6;
             ctx.beginPath();
             ctx.arc(x, y, p.size, 0, Math.PI * 2);
             ctx.fill();
 
             if (subIndex >= 4) {
               ctx.strokeStyle = p.color;
-              ctx.globalAlpha = 0.15;
+              ctx.globalAlpha = 0.08;
               ctx.beginPath();
               ctx.arc(cx, cy, p.radius, 0, Math.PI * 2);
               ctx.stroke();
-              ctx.globalAlpha = 1.0;
             }
           });
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 3) {
           ctx.strokeStyle = colors[0];
+          ctx.globalAlpha = 0.25;
           ctx.lineWidth = 1.5;
           const waveCount = subIndex + 2;
           for (let k = 0; k < waveCount; k++) {
@@ -3842,6 +3959,7 @@ let js = `/**
             }
             ctx.stroke();
           }
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 4) {
           particles.forEach(p => {
@@ -3852,6 +3970,7 @@ let js = `/**
             if (p.y < 0 || p.y > h) p.vy *= -1;
 
             ctx.fillStyle = p.color;
+            ctx.globalAlpha = 0.6;
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
@@ -3865,7 +3984,7 @@ let js = `/**
               const dist = Math.hypot(dx, dy);
               if (dist < 100) {
                 ctx.strokeStyle = colors[0];
-                ctx.globalAlpha = 1 - dist / 100;
+                ctx.globalAlpha = (1 - dist / 100) * 0.15;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
@@ -3877,6 +3996,7 @@ let js = `/**
         }
         else if (category === 5) {
           ctx.strokeStyle = colors[0];
+          ctx.globalAlpha = 0.3;
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           const steps = 300;
@@ -3890,6 +4010,7 @@ let js = `/**
             else ctx.lineTo(lx, ly);
           }
           ctx.stroke();
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 6) {
           ctx.save();
@@ -3904,7 +4025,7 @@ let js = `/**
             grad.addColorStop(1, 'transparent');
 
             ctx.fillStyle = grad;
-            ctx.globalAlpha = p.alpha;
+            ctx.globalAlpha = p.alpha * 0.45;
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
@@ -3913,6 +4034,7 @@ let js = `/**
         }
         else if (category === 7) {
           ctx.font = '14px monospace';
+          ctx.globalAlpha = 0.35;
           particles.forEach(p => {
             p.y += p.speed * speed;
             if (p.y > h) {
@@ -3923,9 +4045,11 @@ let js = `/**
             const char = p.chars[Math.floor(Math.random() * p.chars.length)];
             ctx.fillText(char, p.x, p.y);
           });
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 8) {
           ctx.strokeStyle = colors[0];
+          ctx.globalAlpha = 0.2;
           ctx.lineWidth = 1.5;
           function drawSubBranch(x, y, len, angle, depth) {
             if (depth === 0) return;
@@ -3940,9 +4064,11 @@ let js = `/**
             drawSubBranch(x2, y2, len * 0.7, angle + angleDelta, depth - 1);
           }
           drawSubBranch(w / 2, h, h * 0.2, -Math.PI / 2, 6);
+          ctx.globalAlpha = 1.0;
         }
         else if (category === 9) {
           ctx.strokeStyle = colors[0];
+          ctx.globalAlpha = 0.25;
           ctx.lineWidth = 1.5;
           const segments = subIndex + 4;
           const angle = (Math.PI * 2) / segments;
@@ -3959,6 +4085,7 @@ let js = `/**
             ctx.stroke();
           }
           ctx.restore();
+          ctx.globalAlpha = 1.0;
         }
 
         requestAnimationFrame(animate);

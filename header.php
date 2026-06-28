@@ -40,7 +40,7 @@
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
                 <li class="nav-item"><a class="nav-link" href="css_studio/index.html" target="_blank">CSS Studio</a></li>
-                <li class="nav-item"><a class="nav-link" href="ak-framework/demo/index.html" target="_blank">ak Framework</a></li>
+                <li class="nav-item"><a class="nav-link" href="ak-framework/demo/index.html" target="_blank">AK Framework</a></li>
                 <li class="nav-item"><a class="nav-link" href="ak-framework/demo/admin_builder.html" target="_blank">Panel Builder</a></li>
                 <li class="nav-item"><a class="nav-link" href="#experience">Journey</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
