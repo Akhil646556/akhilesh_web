@@ -1990,11 +1990,11 @@ function initHtmlReference() {
   const tagNameEl = document.getElementById('html-tag-name');
   const tagCategoryEl = document.getElementById('html-tag-category');
   const tagDescEl = document.getElementById('html-tag-desc');
-  const controlsList = document.getElementById('html-tag-controls');
   const previewBox = document.getElementById('html-preview-box');
   const codeDisplay = document.getElementById('html-code-display');
   let openSandboxBtn = document.getElementById('html-open-sandbox');
   let copyCodeBtn = document.getElementById('html-copy-code');
+  const eduDetails = document.getElementById('html-educational-details');
 
   let activeTag = null;
 
@@ -2044,104 +2044,149 @@ function initHtmlReference() {
     }
   };
 
+  const renderAttributesTable = (attrs) => {
+    if (!attrs || attrs.length === 0) {
+      return `<div style="color: var(--text-muted); font-size: 13.5px; font-style: italic;">No specific attributes. Supports all global attributes.</div>`;
+    }
+    let rows = attrs.map(attr => `
+      <tr style="border-bottom: 1px solid var(--border-color);">
+        <td style="padding: 10px; font-family: var(--font-mono); color: var(--accent-cyan); font-size: 13px; font-weight: bold; width: 25%;">${attr.name}</td>
+        <td style="padding: 10px; font-size: 13px; color: var(--text-main);">${attr.desc}</td>
+      </tr>
+    `).join('');
+    return `
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 10px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; font-weight: 700;">Attribute</th>
+            <th style="padding: 10px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; font-weight: 700;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    `;
+  };
+
   const selectTag = (tag) => {
     activeTag = tag;
     emptyMsg.style.display = 'none';
     activeContent.style.display = 'block';
 
     tagNameEl.innerText = tag.name;
-    tagCategoryEl.innerText = tag.category;
+    tagCategoryEl.innerText = tag.category || 'Guide';
     tagDescEl.innerText = tag.desc;
 
-    // Render controls
-    controlsList.innerHTML = '';
-    const currentValues = {};
+    const workspaceGrid = activeContent.querySelector('.explorer-workspace-grid');
+    const controlsCard = activeContent.querySelector('.explorer-controls-card');
 
-    tag.controls.forEach(ctrl => {
-      const ctrlGroup = document.createElement('div');
-      ctrlGroup.className = 'control-group';
+    if (tag.isGuide) {
+      workspaceGrid.style.display = 'none';
+      eduDetails.style.display = 'block';
+      eduDetails.innerHTML = `
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px; line-height: 1.7; font-size: 14.5px;">
+          ${tag.content}
+        </div>
+      `;
+    } else {
+      workspaceGrid.style.display = 'grid';
+      workspaceGrid.style.gridTemplateColumns = '1fr';
+      controlsCard.style.display = 'none';
+      eduDetails.style.display = 'block';
 
-      const label = document.createElement('label');
-      label.className = 'control-label';
-      label.innerHTML = `${ctrl.label} ${ctrl.type === 'range' ? `<span class="value-bubble" id="html-val-${ctrl.id}">${ctrl.value}${ctrl.unit || ''}</span>` : ''}`;
-      ctrlGroup.appendChild(label);
+      // Render the educational details sections
+      const attributesTable = renderAttributesTable(tag.attributes);
+      const mistakesList = tag.mistakes && tag.mistakes.length ? tag.mistakes.map(m => `<li>${m}</li>`).join('') : '<li>None reported. Keep tag nested correctly.</li>';
+      const practicesList = tag.practices && tag.practices.length ? tag.practices.map(p => `<li>${p}</li>`).join('') : '<li>Follow normal nesting guidelines.</li>';
+      const relatedBtns = tag.related && tag.related.length ? tag.related.map(rel => `
+        <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px; font-family: var(--font-mono); cursor:pointer;" onclick="selectTagByName('${rel}')">&lt;${rel}&gt;</button>
+      `).join('') : '<span style="color: var(--text-muted); font-size: 13px;">None</span>';
 
-      let inputEl;
-      if (ctrl.type === 'range') {
-        inputEl = document.createElement('input');
-        inputEl.type = 'range';
-        inputEl.id = `html-ctrl-${ctrl.id}`;
-        inputEl.min = ctrl.min;
-        inputEl.max = ctrl.max;
-        if (ctrl.step) inputEl.step = ctrl.step;
-        inputEl.value = ctrl.value;
+      eduDetails.innerHTML = `
+        <!-- Explanation Block -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-cyan); font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-baby" style="font-size:14px"></i> What is it? (Simple English)</h3>
+            <p style="font-size: 14px; line-height: 1.6; color: var(--text-main);">${tag.what || ''}</p>
+          </div>
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-blue); font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-lightbulb" style="font-size:14px"></i> Why do we use it? (Real World)</h3>
+            <p style="font-size: 14px; line-height: 1.6; color: var(--text-main);">${tag.why || ''}</p>
+          </div>
+        </div>
 
-        inputEl.addEventListener('input', (e) => {
-          const bubble = document.getElementById(`html-val-${ctrl.id}`);
-          if (bubble) bubble.innerText = `${e.target.value}${ctrl.unit || ''}`;
-          updateTagPreview();
-        });
-      } else if (ctrl.type === 'color') {
-        inputEl = document.createElement('input');
-        inputEl.type = 'color';
-        inputEl.id = `html-ctrl-${ctrl.id}`;
-        inputEl.value = ctrl.value;
+        <!-- Attributes Table -->
+        <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); padding: 24px; border-radius: 10px;">
+          <h3 style="color: var(--accent-cyan); font-size: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-list-ul"></i> Key Attributes</h3>
+          ${attributesTable}
+        </div>
 
-        inputEl.addEventListener('input', () => {
-          updateTagPreview();
-        });
-      } else if (ctrl.type === 'select') {
-        inputEl = document.createElement('select');
-        inputEl.className = 'template-select';
-        inputEl.style.width = '100%';
-        inputEl.id = `html-ctrl-${ctrl.id}`;
+        <!-- Best Practices & Common Mistakes -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.15); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-emerald); font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-check-circle"></i> Best Practices</h3>
+            <ul style="font-size: 13.5px; line-height: 1.6; color: var(--text-main); padding-left: 20px; margin: 0;">
+              ${practicesList}
+            </ul>
+          </div>
+          <div style="background: rgba(239, 68, 68, 0.03); border: 1px solid rgba(239, 68, 68, 0.15); padding: 20px; border-radius: 10px;">
+            <h3 style="color: #f87171; font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-times-circle"></i> Common Beginner Mistakes</h3>
+            <ul style="font-size: 13.5px; line-height: 1.6; color: var(--text-main); padding-left: 20px; margin: 0;">
+              ${mistakesList}
+            </ul>
+          </div>
+        </div>
 
-        ctrl.options.forEach(opt => {
-          const option = document.createElement('option');
-          option.value = opt;
-          option.text = opt;
-          if (opt === ctrl.value) option.selected = true;
-          inputEl.appendChild(option);
-        });
+        <!-- Accessibility & SEO -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div style="background: rgba(245, 158, 11, 0.03); border: 1px solid rgba(245, 158, 11, 0.15); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-amber); font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-universal-access"></i> Accessibility (A11y) Tips</h3>
+            <p style="font-size: 13.5px; line-height: 1.6; color: var(--text-main); margin: 0;">${tag.accessibility || 'No specific accessibility requirements. Ensure correct nested structures.'}</p>
+          </div>
+          <div style="background: rgba(79, 172, 254, 0.03); border: 1px solid rgba(79, 172, 254, 0.15); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-blue); font-size: 15px; margin-bottom: 10px; display:flex; align-items:center; gap:8px;"><i class="fas fa-search-plus"></i> Search Engine Optimization (SEO)</h3>
+            <p style="font-size: 13.5px; line-height: 1.6; color: var(--text-main); margin: 0;">${tag.seo || 'No direct SEO impact. Use semantic markup to help crawl indexers parse page categories.'}</p>
+          </div>
+        </div>
 
-        inputEl.addEventListener('change', () => {
-          updateTagPreview();
-        });
-      } else if (ctrl.type === 'text') {
-        inputEl = document.createElement('input');
-        inputEl.type = 'text';
-        inputEl.id = `html-ctrl-${ctrl.id}`;
-        inputEl.value = ctrl.value;
-        inputEl.className = 'editor-text-input';
-        inputEl.style.width = '100%';
-        inputEl.style.background = 'var(--bg-primary)';
-        inputEl.style.border = '1px solid var(--border-color)';
-        inputEl.style.color = 'white';
-        inputEl.style.padding = '8px';
-        inputEl.style.borderRadius = '4px';
+        <!-- Browser Compatibility & Related Elements -->
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px;">
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--text-main); font-size: 15px; margin-bottom: 14px; display:flex; align-items:center; gap:8px;"><i class="fas fa-globe"></i> Browser Support</h3>
+            <div style="display: flex; gap: 16px; font-size: 12px; justify-content: space-around;">
+              <div style="text-align: center;">
+                <i class="fab fa-chrome" style="font-size: 20px; color: #4285F4; margin-bottom: 4px; display:block;"></i>
+                <span>Chrome<br><strong>${tag.support ? tag.support.chrome : 'Yes'}</strong></span>
+              </div>
+              <div style="text-align: center;">
+                <i class="fab fa-firefox" style="font-size: 20px; color: #FF7139; margin-bottom: 4px; display:block;"></i>
+                <span>Firefox<br><strong>${tag.support ? tag.support.firefox : 'Yes'}</strong></span>
+              </div>
+              <div style="text-align: center;">
+                <i class="fab fa-safari" style="font-size: 20px; color: #00A3E0; margin-bottom: 4px; display:block;"></i>
+                <span>Safari<br><strong>${tag.support ? tag.support.safari : 'Yes'}</strong></span>
+              </div>
+              <div style="text-align: center;">
+                <i class="fab fa-edge" style="font-size: 20px; color: #0078D7; margin-bottom: 4px; display:block;"></i>
+                <span>Edge<br><strong>${tag.support ? tag.support.edge : 'Yes'}</strong></span>
+              </div>
+            </div>
+          </div>
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--text-main); font-size: 15px; margin-bottom: 14px; display:flex; align-items:center; gap:8px;"><i class="fas fa-link"></i> Related Elements</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              ${relatedBtns}
+            </div>
+          </div>
+        </div>
+      `;
 
-        inputEl.addEventListener('input', () => {
-          updateTagPreview();
-        });
-      }
-
-      ctrlGroup.appendChild(inputEl);
-      controlsList.appendChild(ctrlGroup);
-      currentValues[ctrl.id] = ctrl.value;
-    });
-
-    const updateTagPreview = () => {
       // Gather inputs
-      tag.controls.forEach(ctrl => {
-        const el = document.getElementById(`html-ctrl-${ctrl.id}`);
-        if (el) currentValues[ctrl.id] = el.value;
-      });
-
-      // Calculate HTML code
-      const compiledHtml = tag.customCompiler(currentValues);
+      const compiledHtml = tag.syntax;
 
       // Render visually
-      previewBox.innerHTML = compiledHtml;
+      updateHtmlReferencePreview(compiledHtml);
 
       // Set value on textarea directly
       codeDisplay.value = compiledHtml;
@@ -2178,9 +2223,27 @@ function initHtmlReference() {
         document.querySelector('.tab-btn[data-tab="sandbox"]').click();
         showToast('Loaded HTML element into Sandbox!', 'success');
       });
-    };
+    }
+  };
 
-    updateTagPreview();
+  window.selectTagByName = (name) => {
+    let foundTag = null;
+    for (const group of htmlTagsData) {
+      foundTag = group.tags.find(t => t.name.toLowerCase() === name.toLowerCase() || t.name.replace(/[<>]/g, '').toLowerCase() === name.toLowerCase());
+      if (foundTag) break;
+    }
+    if (foundTag) {
+      const btns = treeContainer.querySelectorAll('.html-item-btn');
+      btns.forEach(btn => {
+        const btnName = btn.innerText.toLowerCase();
+        if (btnName === foundTag.name.toLowerCase() || btnName.replace(/[<>]/g, '') === foundTag.name.replace(/[<>]/g, '').toLowerCase()) {
+          document.querySelectorAll('.html-item-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectTag(foundTag);
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
   };
 
   searchInput.addEventListener('input', (e) => {
@@ -2698,10 +2761,7 @@ function initEditableCodeDisplays() {
   const htmlDisplay = document.getElementById('html-code-display');
   if (htmlDisplay) {
     htmlDisplay.addEventListener('input', (e) => {
-      const previewBox = document.getElementById('html-preview-box');
-      if (previewBox) {
-        previewBox.innerHTML = e.target.value;
-      }
+      updateHtmlReferencePreview(e.target.value);
     });
   }
 
@@ -2725,6 +2785,105 @@ function initEditableCodeDisplays() {
       });
     }
   });
+}
+
+// Renders the HTML markup in the HTML Reference tab's preview box using an iframe
+function updateHtmlReferencePreview(htmlString) {
+  const previewBox = document.getElementById('html-preview-box');
+  if (!previewBox) return;
+
+  // Let's reuse the iframe if it already exists, or create it if not
+  let iframe = previewBox.querySelector('iframe');
+  if (!iframe) {
+    previewBox.innerHTML = '';
+    iframe = document.createElement('iframe');
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.background = 'transparent';
+    previewBox.appendChild(iframe);
+  }
+
+  const customFont = window.googleFontsLink || '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">';
+  const fontAwesome = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">';
+
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
+  
+  const completeHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        ${customFont}
+        ${fontAwesome}
+        <style>
+          html, body {
+            margin: 0;
+            padding: 24px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: #f3f4f6;
+            font-family: 'Outfit', 'Inter', sans-serif;
+            box-sizing: border-box;
+          }
+          /* Custom styles for previewing templates */
+          .preview-template-wrapper {
+            border: 1px dashed rgba(0, 242, 254, 0.4);
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+            margin: 10px 0;
+            background: rgba(0, 242, 254, 0.02);
+            min-width: 280px;
+            text-align: center;
+            color: #f3f4f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          }
+          .preview-template-label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #181b23;
+            color: #00f2fe;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 0 8px;
+            border: 1px dashed rgba(0, 242, 254, 0.4);
+            border-radius: 4px;
+          }
+        </style>
+      </head>
+      <body>
+        ${htmlString}
+        <script>
+          // Find templates and render their content for preview purposes
+          document.querySelectorAll('template').forEach(tpl => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'preview-template-wrapper';
+            
+            const label = document.createElement('div');
+            label.className = 'preview-template-label';
+            label.innerText = 'Template Blueprint Content';
+            
+            wrapper.appendChild(label);
+            
+            // Clone and append content
+            const contentClone = document.importNode(tpl.content, true);
+            wrapper.appendChild(contentClone);
+            
+            tpl.parentNode.insertBefore(wrapper, tpl.nextSibling);
+          });
+        <\/script>
+      </body>
+    </html>
+  `;
+
+  doc.open();
+  doc.write(completeHtml);
+  doc.close();
 }
 
 
